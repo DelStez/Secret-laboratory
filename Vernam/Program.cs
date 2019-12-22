@@ -9,16 +9,18 @@ namespace Vernam
 {
     class Program
     {
-        static byte[] ConvertToByte(BitArray ba3)
+        static void Main(string[] args)
         {
-            var bytes = new byte[(ba3.Length - 1)/ 8 + 1];
-            ba3.CopyTo(bytes, 0);
-            return bytes;
+            VernamChypher("18 1 2 5 7", "ЯДБЛГЙРРЕЧНУВЖЙВД");
+
         }
+        
 
         static void VernamChypher(string gamma, string chyphergramm)
         {
+            Encoding encoding = Encoding.GetEncoding("Windows-1251");
             List<int> g = new List<int>(gamma.Split(' ').Select(Int32.Parse).ToArray());
+            byte[] chypherByte = encoding.GetBytes(chyphergramm);
             for (int j = 0; j < (chyphergramm.Length); j++)
             {
                 g.Add(g[j]);
@@ -30,11 +32,6 @@ namespace Vernam
             {
                 decimicalCode[i] = Convert.ToByte(g[i]);
             }
-            Encoding encoding = Encoding.GetEncoding("Windows-1251");
-        
-            int z = gamma.Length;
-            byte[] chypherByte = encoding.GetBytes(chyphergramm);
-           
             BitArray ba1 = new BitArray(decimicalCode);
             BitArray ba2 = new BitArray(chypherByte);
             BitArray ba3 = ba1.Xor(ba2);
@@ -42,10 +39,11 @@ namespace Vernam
             string str = encoding.GetString(byteArr, 0, byteArr.Length);
             Console.WriteLine(str);
         }
-        static void Main(string[] args)
+        static byte[] ConvertToByte(BitArray ba3)
         {
-            VernamChypher("18 1 2 5 7", "ЯДБЛГЙРРЕЧНУВЖЙВД");
-
+            var bytes = new byte[ba3.Length / 8];
+            ba3.CopyTo(bytes, 0);
+            return bytes;
         }
     }
    
