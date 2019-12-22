@@ -58,6 +58,19 @@ namespace Vernam
 
         static void VernamChypher(string gamma, string chyphergramm)
         {
+            List<int> g = new List<int>(gamma.Split(' ').Select(Int32.Parse).ToArray());
+            for (int j = 0; j < (chyphergramm.Length); j++)
+            {
+                g.Add(g[j]);
+                if (g.Count == chyphergramm.Length) break;
+
+            }
+            byte[] decimicalCode = new byte[chyphergramm.Length];
+            for (int i = 0; i < (chyphergramm.Length); i++)
+            {
+                decimicalCode[i] = Convert.ToByte(Convert.ToInt32(g[i]));
+            }
+            g.SelectMany(BitConverter.GetBytes).ToArray();
             Encoding encoding = Encoding.GetEncoding("Windows-1251");
             gamma = gamma.Replace(" ", "");
                 for (int j = 0; j < (chyphergramm.Length); j++)
@@ -66,11 +79,11 @@ namespace Vernam
                     if (gamma.Length == chyphergramm.Length) break;
                     
                 }
-            int g = gamma.Length;
+            int z = gamma.Length;
             byte[] gammByte = encoding.GetBytes(gamma);
             byte[] chypherByte = encoding.GetBytes(chyphergramm);
            
-            BitArray ba1 = new BitArray(gammByte);
+            BitArray ba1 = new BitArray(decimicalCode);
             BitArray ba2 = new BitArray(chypherByte);
             BitArray ba3 = ba1.Xor(ba2);
             byte[] byteArr = ConvertToByte(ba3);
