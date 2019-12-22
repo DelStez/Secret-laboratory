@@ -31,7 +31,7 @@ namespace Vernam
     //        {
     //            byte[] q = BitConverter.GetBytes(text[i]);
     //            byte[] h = Encoding.ASCII.GetBytes(currentKey.Split(' ')[i]);
-    //            for(var j = 0; j < q[i];j++)
+    //            for (var j = 0; j < q[i]; j++)
     //                res += ((char)(q[j] ^ h[j]));
     //        }
 
@@ -83,16 +83,16 @@ namespace Vernam
 
             //var x = new XORCipher();
             //Console.Write("Введите текст сообщения: ");
-            //var message = Console.ReadLine();
+            //var message = "ЯДБЛГЙРРЕЧНУВЖЙВД";
             //Console.Write("Введите пароль: ");
-            //var pass = Console.ReadLine();
+            //var pass = "18 1 2 5 7";
             ////foreach(var n in pass.Split)
             ////byte[] q = Encoding.ASCII.GetBytes(message);
             ////var encryptedMessageByPass = x.Encrypt(message, pass);
             ////Console.WriteLine("Зашифрованное сообщение {0}", encryptedMessageByPass);
             //Console.WriteLine("Расшифрованное сообщение {0}", x.Decrypt(message, pass));
             //Console.ReadLine();
-            
+
         }
     }
    
