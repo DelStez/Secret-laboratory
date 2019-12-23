@@ -7,7 +7,7 @@ namespace Atbash
         static void Main(string[] args)
         {
             string alfaBet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-            string code = "ТСРЬЦЪШЪЮЛЫЛМПЪОЭДЪПРНУЪЫСЦТЦЦПРНУЪЫСЦЪПЪОЭДТЦ";
+            string code = "СЪМСЛШЫДЭЪЖЯМГФРУРФРУГЗЦФСЯЫЛОЯФЯ";
             string decode = "";
             Console.WriteLine(alfaBet);
             for (int i = 0; i < code.Length; i++)
