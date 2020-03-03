@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{41EF2181-9380-4C5E-8206-061E532C2D0A}</ProjectGuid>
+    <ProjectGuid>{912D111B-FEF8-440E-9B59-F6377FEBD4DF}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>QuadraticSieveAlgorithm</RootNamespace>
-    <AssemblyName>QuadraticSieveAlgorithm</AssemblyName>
+    <RootNamespace>CipherHill</RootNamespace>
+    <AssemblyName>CipherHill</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
