@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atbash cypher", "Atbash cypher.csproj", "{11BEC0C4-7092-429D-BAD6-7E362DE2B2FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllInOne", "AllInOne.csproj", "{AD167341-39BE-42A8-8874-AD1EB0765ABD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{11BEC0C4-7092-429D-BAD6-7E362DE2B2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11BEC0C4-7092-429D-BAD6-7E362DE2B2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11BEC0C4-7092-429D-BAD6-7E362DE2B2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11BEC0C4-7092-429D-BAD6-7E362DE2B2FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD167341-39BE-42A8-8874-AD1EB0765ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD167341-39BE-42A8-8874-AD1EB0765ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD167341-39BE-42A8-8874-AD1EB0765ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD167341-39BE-42A8-8874-AD1EB0765ABD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {FC755E4C-E33E-46A7-A90D-1BC308B6DCD0}
+		SolutionGuid = {1FBC63BD-CC36-44F7-8D90-E15E62026EB0}
 	EndGlobalSection
 EndGlobal

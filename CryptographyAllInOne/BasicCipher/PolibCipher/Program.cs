@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pollib_cypher
+namespace PolibCipher
 {
-    class Program
+    class Pollib
     {
-
+        int size;
+        string message;
         static char[,] alphabet = {
                                    {'А', 'Б', 'В', 'Г', 'Д', 'Е',},
                                    {'Ё','Ж', 'З', 'И', 'Й', 'К'},
@@ -16,12 +17,11 @@ namespace Pollib_cypher
                                    {'С','Т', 'У', 'Ф', 'Х', 'Ц'},
                                    {'Ч','Ш', 'Щ', 'Ъ', 'Ы', 'Ь'},
                                    {'Э','Ю', 'Я', ',', '.', ' '}
-                               };
-        static void Main(string[] args)
+            };
+        static string Encrypt(string opentext)
         {
-            string openText = "П";
-            string decode = "";
-            foreach (char ch in openText)
+            string codeOneLevel = "";
+            foreach (char ch in opentext)
             {
                 for (int i = 0; i < alphabet.GetLength(0); i++)
                 {
@@ -29,12 +29,27 @@ namespace Pollib_cypher
                     {
                         if (alphabet[i, j] == ch)
                         {
-                            decode += ((i+1).ToString() + (j+1).ToString() + " ");
+                            codeOneLevel += ((i + 1).ToString() + (j + 1).ToString() + " ");
                         }
                     }
                 }
             }
-            Console.WriteLine(decode);
+            return codeOneLevel;
+        }
+        static string Decrypt(string cipherText)
+        {
+            string result = "";
+            string[] inputArray = cipherText.Split(' ').ToArray();
+          
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                string temp = inputArray[i].ToString();
+                int indexFirst = Convert.ToInt32(temp[0].ToString()) - 1;
+                int indexSecond = Convert.ToInt32(temp[1].ToString()) - 1;
+                char t = alphabet[indexFirst, indexSecond];
+                result += t;
+            }
+            return result;
         }
     }
 }

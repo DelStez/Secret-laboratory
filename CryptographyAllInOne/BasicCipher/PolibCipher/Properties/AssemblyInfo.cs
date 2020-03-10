@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-[assembly: AssemblyTitle("Pollib cypher")]
+[assembly: AssemblyTitle("PolibCipher")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Pollib cypher")]
+[assembly: AssemblyProduct("PolibCipher")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-[assembly: Guid("d58074fc-a9f5-4fdb-9c7b-5ef01c37c415")]
+[assembly: Guid("62321346-582e-4bc7-88c2-ecf8d1472244")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

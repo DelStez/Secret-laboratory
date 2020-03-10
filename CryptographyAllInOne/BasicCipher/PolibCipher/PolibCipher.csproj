@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{11BEC0C4-7092-429D-BAD6-7E362DE2B2FB}</ProjectGuid>
+    <ProjectGuid>{62321346-582E-4BC7-88C2-ECF8D1472244}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Atbash_cypher</RootNamespace>
-    <AssemblyName>Atbash cypher</AssemblyName>
+    <RootNamespace>PolibCipher</RootNamespace>
+    <AssemblyName>PolibCipher</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

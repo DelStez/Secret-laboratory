@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-[assembly: AssemblyTitle("Atbash cypher")]
+[assembly: AssemblyTitle("AllInOne")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Atbash cypher")]
+[assembly: AssemblyProduct("AllInOne")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-[assembly: Guid("11bec0c4-7092-429d-bad6-7e362de2b2fb")]
+[assembly: Guid("ad167341-39be-42a8-8874-ad1eb0765abd")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

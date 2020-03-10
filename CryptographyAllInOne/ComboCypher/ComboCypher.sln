@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caesar cypher", "Caesar cypher.csproj", "{4270DA20-B483-4DA6-BAE4-1987177E0E88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComboCypher", "ComboCypher.csproj", "{69756892-609E-40B9-83B4-8EF4EAE28925}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4270DA20-B483-4DA6-BAE4-1987177E0E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4270DA20-B483-4DA6-BAE4-1987177E0E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4270DA20-B483-4DA6-BAE4-1987177E0E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4270DA20-B483-4DA6-BAE4-1987177E0E88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69756892-609E-40B9-83B4-8EF4EAE28925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69756892-609E-40B9-83B4-8EF4EAE28925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69756892-609E-40B9-83B4-8EF4EAE28925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69756892-609E-40B9-83B4-8EF4EAE28925}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BAA57B90-98F3-4421-BAAC-163F97FF5413}
+		SolutionGuid = {3E10A516-89DF-42A5-A61B-BC865A6BA14B}
 	EndGlobalSection
 EndGlobal

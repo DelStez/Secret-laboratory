@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4270DA20-B483-4DA6-BAE4-1987177E0E88}</ProjectGuid>
+    <ProjectGuid>{AD167341-39BE-42A8-8874-AD1EB0765ABD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Caesar_cypher</RootNamespace>
-    <AssemblyName>Caesar cypher</AssemblyName>
+    <RootNamespace>AllInOne</RootNamespace>
+    <AssemblyName>AllInOne</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,8 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ciphers\Atbash.cs" />
+    <Compile Include="Ciphers\Beaufort.cs" />
+    <Compile Include="Ciphers\Caesar.cs" />
+    <Compile Include="Ciphers\Cipher.cs" />
+    <Compile Include="Ciphers\Gronsfeld.cs" />
+    <Compile Include="Ciphers\Pollib.cs" />
+    <Compile Include="Ciphers\Vegenere.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Alphabets.cs" />
+    <Compile Include="Tools\Maths.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
