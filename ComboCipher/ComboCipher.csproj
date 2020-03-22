@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{69756892-609E-40B9-83B4-8EF4EAE28925}</ProjectGuid>
+    <ProjectGuid>{3E52E79D-8BE2-4498-9AB9-F6443BCBDAA6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ComboCypher</RootNamespace>
-    <AssemblyName>ComboCypher</AssemblyName>
+    <RootNamespace>ComboCipher</RootNamespace>
+    <AssemblyName>ComboCipher</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cipher.cs" />
+    <Compile Include="DoubleRearrangement.cs" />
+    <Compile Include="Polib.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

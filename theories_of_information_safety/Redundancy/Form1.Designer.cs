@@ -37,13 +37,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.symbol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.p = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button2 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.symbol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.p = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -80,6 +80,7 @@
             this.textBox2.Location = new System.Drawing.Point(2, 39);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(337, 399);
             this.textBox2.TabIndex = 3;
             // 
@@ -87,16 +88,16 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(77)))), ((int)(((byte)(119)))));
-            this.label1.Location = new System.Drawing.Point(357, 18);
+            this.label1.Location = new System.Drawing.Point(6, 362);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "label1";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -154,7 +155,30 @@
             this.dataGridView1.ShowRowErrors = false;
             this.dataGridView1.Size = new System.Drawing.Size(190, 313);
             this.dataGridView1.TabIndex = 3;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // number
+            // 
+            this.number.HeaderText = "I";
+            this.number.Name = "number";
+            this.number.ReadOnly = true;
+            this.number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.number.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // symbol
+            // 
+            this.symbol.HeaderText = "Символ";
+            this.symbol.Name = "symbol";
+            this.symbol.ReadOnly = true;
+            this.symbol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.symbol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // p
+            // 
+            this.p.HeaderText = "P(i)";
+            this.p.Name = "p";
+            this.p.ReadOnly = true;
+            this.p.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.p.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // button2
             // 
@@ -185,30 +209,6 @@
             // 
             this.saveFileDialog1.CheckFileExists = true;
             // 
-            // number
-            // 
-            this.number.HeaderText = "I";
-            this.number.Name = "number";
-            this.number.ReadOnly = true;
-            this.number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.number.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // symbol
-            // 
-            this.symbol.HeaderText = "Символ";
-            this.symbol.Name = "symbol";
-            this.symbol.ReadOnly = true;
-            this.symbol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.symbol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // p
-            // 
-            this.p.HeaderText = "P(i)";
-            this.p.Name = "p";
-            this.p.ReadOnly = true;
-            this.p.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.p.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,14 +216,13 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(142)))), ((int)(((byte)(123)))));
             this.ClientSize = new System.Drawing.Size(719, 450);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
