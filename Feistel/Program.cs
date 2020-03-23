@@ -41,19 +41,20 @@ namespace Feistel
                 if (i < CountR - 1)
                 {
                     BitArray temp1 = Left;
-                    Left = Right.Xor(F());
+                    Left = Right.Xor(F(Left, roundLevel));
                     Right = temp1;
                 }
                 else
-                    Right = Right.Xor(F());
+                    Right = Right.Xor(F(Left, roundLevel));
             }
             temp[0] = ConvertToByte(Left);
             temp[1] = ConvertToByte(Right);
 
         }
-        private static BitArray F()
+        private static BitArray F(BitArray A, int B)
         {
-            return 
+            byte newA = ConvertToByte(A);
+            return new BitArray((Convert.ToInt32(newA)+B) % 256);
         }
         static void Main(string[] args)
         {
