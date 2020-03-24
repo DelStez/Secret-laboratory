@@ -12,12 +12,7 @@ namespace Feistel
         public static bool Mode; // булевая функция отвечающая за шифрование(true) и дешифрование 
         public static int CountR;
         public static byte[] temp = new byte[2];
-        static byte ConvertToByte(BitArray ba3)
-        {
-            var bytes = new byte[ba3.Length / 8];
-            ba3.CopyTo(bytes, 0);
-            return bytes[0];
-        }
+        public static byte[] key = { 183, 222, 126, 50, 205, 133, 46,  50 };
         public static byte[] CipherMode(byte[] message, byte[] key)
         {
             byte[] result = new byte[message.Length];
@@ -33,40 +28,41 @@ namespace Feistel
         }
         public static void Feistel()
         {
-            int roundLevel = Mode ? CountR : 1;
-            BitArray Left = new BitArray(temp[0]);
-            BitArray Right = new BitArray(temp[1]);
-            for (int i = 0; i < CountR; )
+            int roundLevel = 0;
+            byte Left = temp[0];
+            byte Right = temp[1];
+            for (int i = 0; i < CountR; i++, roundLevel++)
             {
                 if (i < CountR - 1)
                 {
-                    BitArray temp1 = Left;
-                    Left = Right.Xor(F(Left, roundLevel));
+                    byte temp1 = Left;
+                    Left = Convert.ToByte(Right^(F(Left, key[roundLevel])));
                     Right = temp1;
-                }
-                else
-                    Right = Right.Xor(F(Left, roundLevel));
+                }      
             }
-            temp[0] = ConvertToByte(Left);
-            temp[1] = ConvertToByte(Right);
+            temp[0] = Left;
+            temp[1] = Right;
 
         }
-        private static BitArray F(BitArray A, int B)
+        private static int F(byte A, int B)
         {
-            byte newA = ConvertToByte(A);
-            return new BitArray((Convert.ToInt32(newA)+B) % 256);
+            int result = ((Convert.ToInt32(A) + B) % (2*temp.Length));
+
+            return result;
         }
         static void Main(string[] args)
         {
             string message = "КАНДАКОВА АНАСТАСИЯ НИКОЛАЕВНА";
             Random r = new Random();
-            byte[] key = new byte[16];
-            CountR = key.Length;
-            r.NextBytes(key);
+            CountR = key.Length-1;
+            //r.NextBytes(key);
             if (message.Length % 2 != 0) message += " ";
             byte[] messageInByte = Encoding.UTF8.GetBytes(message);
-            Mode = true;
             byte[] outputCipher = CipherMode(messageInByte, key);// Encrypt
+            Console.WriteLine(Encoding.UTF8.GetString(outputCipher, 0, outputCipher.Length));
+            outputCipher = CipherMode(outputCipher, key);// decrypt
+            Console.WriteLine(Encoding.UTF8.GetString(outputCipher, 0, outputCipher.Length));
+            Console.ReadLine();
 
         }
     }
