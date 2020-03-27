@@ -98,7 +98,7 @@ namespace Lucipher
             byte[] byteMessage = Encoding.UTF8.GetBytes(message);
             byte[] result  = Encrypt(byteMessage, false);
             Console.WriteLine(Encoding.UTF8.GetString(result));
-            result = Encrypt(byteMessage, true);
+            result = Encrypt(result, true);
             Console.WriteLine(Encoding.UTF8.GetString(result));
 
         }
