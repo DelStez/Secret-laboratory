@@ -29,16 +29,16 @@ namespace Feistel
             byte Left = data[0], Right = data[1];
             for (int i = 0; i < countRound; i++)
             {
-                if (i < countRound-1)
+                if (i < countRound - 1)
                 {
                     byte temp = Left;
                     Left = Convert.ToByte(Right ^ F(Left, key[keyIndexRound]));
                     Right = temp;
-                    
+
                 }
                 else
                 {
-                   
+
                     Right = Convert.ToByte(Right ^ F(Left, key[keyIndexRound]));
 
                 }
@@ -50,14 +50,14 @@ namespace Feistel
         }
         private static byte F(byte A, byte B)
         {
-            BitArray Abit = new BitArray(new byte[] { A});
-            BitArray Bbit = new BitArray(new byte[] { B});
-            byte result = ConvertToByte(Abit.And(Bbit));
+            BitArray Abit = new BitArray(new byte[] { A });
+            BitArray Bbit = new BitArray(new byte[] { B });
+            byte result = ConvertToByte(Abit.Xor(Bbit));
             return result;
         }
         static void Main(string[] args)
         {
-            string message = "FUCK";
+            string message = "FUCK ";
             byte[] messageInByte;
             byte[] key = new byte[8];
             Random random = new Random();
