@@ -14,7 +14,7 @@ namespace Feistel
         {
             byte[] output = new byte[message.Length];
             byte[] temp = new byte[2];//для хранения двух субблоков
-            for (int i = 0; i < message.Length; i+=2)
+            for (int i = 0; i < message.Length-1; i++)
             {
                 temp[0] = message[i]; temp[1] = message[i+1];
                 temp = Feistel(temp, key);
@@ -36,12 +36,7 @@ namespace Feistel
                     Right = temp;
 
                 }
-                else
-                {
 
-                    Right = Convert.ToByte(Right ^ F(Left, key[keyIndexRound]));
-
-                }
                 keyIndexRound++;
             }
             data[0] = Left;
@@ -57,7 +52,7 @@ namespace Feistel
         }
         static void Main(string[] args)
         {
-            string message = "FUCK ";
+            string message = "FUCK";
             byte[] messageInByte;
             byte[] key = new byte[8];
             Random random = new Random();
