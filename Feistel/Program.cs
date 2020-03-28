@@ -8,65 +8,74 @@ using System.Threading.Tasks;
 namespace Feistel
 {
     class Program
-    {
-        public static bool Mode= false; // булевая функция отвечающая за шифрование(false) и дешифрование(true) 
-        public static int CountR;
-        public static byte[] temp = new byte[2];
-        public static byte[] key = { 183, 222, 126, 50, 205, 133, 46,  50 };
+    { 
+        
         public static byte[] CipherMode(byte[] message, byte[] key)
         {
-            byte[] result = new byte[message.Length];
-            for (int i = 0; i < message.Length - 1; i++)
+            byte[] output = new byte[message.Length];
+            byte[] temp = new byte[2];//для хранения двух субблоков
+            for (int i = 0; i < message.Length; i+=2)
             {
-                temp[0] = message[i];
-                temp[1] = message[i + 1];
-                Feistel();
-                result[i] = temp[0];
-                result[i + 1] = temp[1];
+                temp[0] = message[i]; temp[1] = message[i+1];
+                temp = Feistel(temp, key);
+                output[i] = temp[0]; output[i+1] = temp[1];
             }
-            return result;
+            return output;
         }
-        public static void Feistel()
+        public static byte[] Feistel(byte[] data, byte[] key)
         {
-            int roundLevel = Mode ? CountR : 0;
-            byte Left = temp[0];
-            byte Right = temp[1];
-            for (int i = 0; i < CountR; i++, roundLevel += Mode ? -1: 1)
+            int countRound = key.Length - 1;
+            int keyIndexRound = 0;
+            byte Left = data[0], Right = data[1];
+            for (int i = 0; i < countRound; i++)
             {
-                if (i < CountR - 1)
+                if (i < countRound-1)
                 {
-                    byte temp1 = Left;
-                    Left = Convert.ToByte(Right^(F(Left, key[roundLevel])));
-                    Right = temp1;
-                }      
+                    byte temp = Left;
+                    Left = Convert.ToByte(Right ^ F(Left, key[keyIndexRound]));
+                    Right = temp;
+                    
+                }
                 else
-                    Right = Convert.ToByte(Right ^ (F(Left, key[roundLevel])));
-            }
-            temp[0] = Left;
-            temp[1] = Right;
+                {
+                   
+                    Right = Convert.ToByte(Right ^ F(Left, key[keyIndexRound]));
 
+                }
+                keyIndexRound++;
+            }
+            data[0] = Left;
+            data[1] = Right;
+            return data;
         }
         private static byte F(byte A, byte B)
         {
-
-            byte result = Convert.ToByte(((A+B)^B) % 256);
+            BitArray Abit = new BitArray(new byte[] { A});
+            BitArray Bbit = new BitArray(new byte[] { B});
+            byte result = ConvertToByte(Abit.And(Bbit));
             return result;
         }
         static void Main(string[] args)
         {
-            string message = "КАНДАКОВА АНАСТАСИЯ НИКОЛАЕВНА";
-            Random r = new Random();
-            CountR = key.Length - 1;
-            r.NextBytes(key);
-            if (message.Length % 2 != 0) message += " ";
-            byte[] messageInByte = Encoding.UTF8.GetBytes(message);
-            byte[] outputCipher = CipherMode(messageInByte, key);// Encrypt
-            Console.WriteLine(Encoding.UTF8.GetString(outputCipher, 0, outputCipher.Length));
-            Mode = true;
-            outputCipher = CipherMode(outputCipher, key);// decrypt
-            Console.WriteLine(Encoding.UTF8.GetString(outputCipher, 0, outputCipher.Length));
-            Console.ReadLine();
+            string message = "FUCK";
+            byte[] messageInByte;
+            byte[] key = new byte[8];
+            Random random = new Random();
+            random.NextBytes(key);
+            if (Encoding.UTF8.GetBytes(message).Length % 2 != 0)
+                message += " ";
+            messageInByte = Encoding.UTF8.GetBytes(message);
+            byte[] getOutputMessage = CipherMode(messageInByte, key);
+            Console.WriteLine(Encoding.UTF8.GetString(getOutputMessage));
+            getOutputMessage = CipherMode(getOutputMessage, key);
+            Console.WriteLine(Encoding.UTF8.GetString(getOutputMessage));
 
+        }
+        private static byte ConvertToByte(BitArray fuckingBits)
+        {
+            byte[] _byte = new byte[1];
+            fuckingBits.CopyTo(_byte, 0);
+            return _byte[0];
         }
     }
 }
