@@ -79,6 +79,14 @@ namespace TI_6
             numOfElem++;
         }
 
+        public BinaryTree remove()
+        {
+            BinaryTree temp = data[0];
+            data.RemoveAt(0);
+            numOfElem--;
+            return temp;
+        }
+
     }
     class Huffman
     {
@@ -90,6 +98,21 @@ namespace TI_6
             this.alphabet = alphabet;
             this.encoding = new string[alphabet.Count];
             huffmamTree = GetHTree();
+            EncodingArray(huffmamTree.GetRoot(), "", "");
+            int count = 0;
+            double K = 0;
+            double Shan = 0;
+            foreach (KeyValuePair<string, double> pair in alphabet)
+            {
+                Console.WriteLine($"{pair.Key} - {pair.Value} - {encoding[count]}");
+                K += encoding[count].Length * alphabet[pair.Key];
+                Shan += pair.Value * Math.Log(1 / pair.Value, 2);
+                count++;
+            }
+            Console.WriteLine($"Ср. длина: {Math.Round(K, 3)}");
+            Console.WriteLine($"Энтропия: {Math.Round(Shan, 3)}");
+            Console.WriteLine($"Избыточность кода: {(K / Shan) - 1}");
+
         }
         private BinaryTree GetHTree()
         {
@@ -102,8 +125,34 @@ namespace TI_6
             }
             while (true)
             {
-                    BinaryTree treeOne = 
+                BinaryTree treeOne = q.remove();
+                try
+                {
+                    BinaryTree treeSecond = q.remove();
+                    Node newNode = new Node();
+                    newNode.AddChild(treeOne.GetRoot());
+                    newNode.AddChild(treeSecond.GetRoot());
+                    q.Insert(new BinaryTree(newNode));
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return treeOne;
+                }
             }
+        }
+        void EncodingArray(Node node, string before, string after)
+        {
+            if (node.IsLeaf())
+            {
+                int index = alphabet.Keys.ToList().IndexOf(node.GetLetter());
+                encoding[index] = before + after;
+            }
+            else 
+            {
+                EncodingArray(node.GetLeftChild(), before + after, "0");
+                EncodingArray(node.GetRightChild(), before + after, "1");
+            }
+
         }
     }
     class Program
@@ -141,8 +190,28 @@ namespace TI_6
             { "B", 0.01 }, { "V", 0.008 },
             { "K", 0.003 }, { "X", 0.001 },
             { "J", 0.001 }, { "Q", 0.001 }, { "Z", 0.001 }};
+        static Dictionary<string, double> homeWork = new Dictionary<string, double>
+        {
+            {"_", 0.3}, {"*", 0.2}, {"+", 0.2}, {"%", 0.15}, {"#", 0.1}, {"!", 0.05}
+        };
+        public static Dictionary<string, double> expFour = new Dictionary<string, double> {
+            { "A", 0.2 }, { "B", 0.2 },
+            { "C", 0.19 }, { "D", 0.12 },
+            { "E", 0.11 }, { "F", 0.09 }, { "G", 0.11 }
+        };
         static void Main(string[] args)
         {
+            Console.WriteLine("Задание № 1");
+            new Huffman(alphaBetRUS);
+            Console.WriteLine("___________");
+            Console.WriteLine("Задание № 2");
+            new Huffman(alphaBetENG);
+            Console.WriteLine("___________");
+            Console.WriteLine("Задание № 3");
+            new Huffman(homeWork);
+            Console.WriteLine("___________");
+            Console.WriteLine("Задание № 4");
+            new Huffman(expFour);
         }
     }
 }
