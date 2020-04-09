@@ -134,7 +134,7 @@ namespace TI_6
                     newNode.AddChild(treeSecond.GetRoot());
                     q.Insert(new BinaryTree(newNode));
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
                     return treeOne;
                 }
