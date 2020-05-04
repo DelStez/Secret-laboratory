@@ -60,15 +60,7 @@ namespace DES_WinForms
             Bits.CopyTo(_byte, 0);
             return _byte[0];
         }
-        static BitArray GetTwentyEight(BitArray input, int start)
-        {
-            bool[] temp = new bool[28];
-            for (int i = 0; i < temp.Length; i++)
-            {
-                temp[i] = input[i + start];
-            }
-            return new BitArray(temp);
-        }
+        
         
         public static List<BitArray> getKeys(byte[] _key)
         {
@@ -78,10 +70,13 @@ namespace DES_WinForms
             for (int i = 0; i < 16; i++)
             {
                 //Делим 56битный ключ на 2 блока C и D, каждый сдвигается влево на N битов
-                BitArray C = MatrixDES.leftCircularShift(GetTwentyEight(E, 0), MatrixDES.shiftBits[i]);
-                BitArray D = MatrixDES.leftCircularShift(GetTwentyEight(E, 28), MatrixDES.shiftBits[i]);
+                bool[] CD = new bool[E.Length];
+                E.CopyTo(CD, 0);
+                BitArray C = MatrixDES.leftCircularShift(new BitArray(CD.Take(28).ToArray()), MatrixDES.shiftBits[i]);
+                BitArray D = MatrixDES.leftCircularShift(new BitArray(CD.Skip(28).Take(28).ToArray()), MatrixDES.shiftBits[i]);
                 //Объединяем 2 части и отправляем на сжимающую перестановку(из 56 битов получаем 48 бит)
-                keys.Add(MatrixDES.permutation(new BitArray(C.Cast<bool>().Concat(D.Cast<bool>()).ToArray()), MatrixDES.PC2));
+                E = new BitArray(new BitArray(C.Cast<bool>().Concat(D.Cast<bool>()).ToArray()));
+                keys.Add(MatrixDES.permutation(E, MatrixDES.PC2));
 
             }
             return keys;
