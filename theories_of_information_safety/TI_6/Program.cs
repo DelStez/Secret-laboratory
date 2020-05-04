@@ -199,10 +199,24 @@ namespace TI_6
             { "C", 0.19 }, { "D", 0.12 },
             { "E", 0.11 }, { "F", 0.09 }, { "G", 0.11 }
         };
+        public static Dictionary<string, double> alphaBetENG1 = new Dictionary<string, double>
+        {
+            { "А" , 5 },
+            { "К" , 2 },
+            { "Н" , 2 },
+            { "C" , 2 },
+            { "Д" , 1 },
+            { "О" , 1 },
+            { "В" , 1 },
+            { "Т" , 1 },
+            { "И" , 1 },
+            { "Я" , 1 },
+            { " ", 1},
+        };
         static void Main(string[] args)
         {
             Console.WriteLine("Задание № 1");
-            new Huffman(alphaBetRUS);
+            new Huffman(alphaBetENG1);
             Console.WriteLine("___________");
             Console.WriteLine("Задание № 2");
             new Huffman(alphaBetENG);
@@ -212,6 +226,7 @@ namespace TI_6
             Console.WriteLine("___________");
             Console.WriteLine("Задание № 4");
             new Huffman(expFour);
+            Console.ReadLine();
         }
     }
 }

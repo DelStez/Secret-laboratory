@@ -32,16 +32,16 @@ namespace DES_WinForms
         }
         public static BitArray permutation(BitArray getBlock, int[] block)
         {
-            BitArray output = new BitArray(getBlock.Length);
-             for (int i = 0; i < getBlock.Length; i++)
+            BitArray output = new BitArray(block.Length);
+            for (int i = 0; i < block.Length; i++)
             {
-                output[i] = getBlock[block[i]];
+                output[i] = getBlock[block[i]-1];
             }
             return output;
         }
         public static BitArray leftCircularShift(BitArray getPart, int start )
         {
-            int n = getPart.Length * 4;
+            int n = getPart.Length;
             int[] perm = new int[n];
             for (int i = 0; i < n - 1; i++)
                 perm[i] = (i + 2);
@@ -50,27 +50,38 @@ namespace DES_WinForms
                 getPart = permutation(getPart, perm);
             return getPart;
         }
+        private static int GetIntValues(BitArray bitArray)
+        {
+            int[] result = new int[1];
+            bitArray.CopyTo(result, 0);
+            return result[0];
+        }
         public static BitArray Sbox(BitArray getBlock)
         {
             
-            BitArray output = new BitArray(getBlock.Length);
-            for (int i = 0; i < 192; i += 6)
+            bool[] output = new bool[32];
+            bool[] input = new bool[getBlock.Length];
+            getBlock.CopyTo(input, 0);
+            int start = 0;
+            for (int i = 0; i < 48; i += 6, start+=4)
             {
+                bool[] temp = new bool[6];
+                temp = input.Skip(i).Take(i + 6).ToArray();
                 int num = i / 6;
-                int row = 
-                //output[i] = getBlock[matrixExpansion[i]];
-            }
-            return output;
+                int row = GetIntValues(new BitArray(new bool[2] { temp[0], temp[5] }));
+                int col = GetIntValues(new BitArray(new bool[4] { temp[1], temp[2], temp[3], temp[4] }));
+                BitArray FourBits = new BitArray(BitConverter.GetBytes(Sboxs[num, row, col]));
+                bool[] temp4 = new bool[FourBits.Length];
+                FourBits.CopyTo(temp4, 0);
+                (temp4.Take(4).ToArray()).CopyTo(output, start);
+            }   
+            return new BitArray(output);
         }
         public static int[] IPblock = {
-                      58, 50, 42, 34, 26, 18, 10, 2,
-                      60, 52, 44, 36, 28, 20, 12, 4,
-                      62, 54, 46, 38, 30, 22, 14, 6,
-                      64, 56, 48, 40, 32, 24, 16, 8,
-                      57, 49, 41, 33, 25, 17, 9, 1,
-                      59, 51, 43, 35, 27, 19, 11, 3,
-                      61, 53, 45, 37, 29, 21, 13, 5,
-                      63, 55, 47, 39, 31, 23, 15, 7
+                      58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4,
+                      62, 54, 46, 38, 30, 22, 14, 6, 64, 56, 48, 40, 32, 24, 16, 8,
+                      57, 49, 41, 33, 25, 17, 9, 1, 59, 51, 43, 35, 27, 19, 11, 3,
+                      61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31, 23, 15, 7
         };
         public static int[] IPblockEnd = {
                       40, 8, 48, 16, 56, 24,
@@ -86,14 +97,14 @@ namespace DES_WinForms
                       49, 17, 57, 25
         };
         // Таблица №1 для ключа
-        public static int[] PC1 = { 57, 49, 41, 33, 25,
-                      17, 9, 1, 58, 50, 42, 34, 26,
-                      18, 10, 2, 59, 51, 43, 35, 27,
-                      19, 11, 3, 60, 52, 44, 36, 63,
-                      55, 47, 39, 31, 23, 15, 7, 62,
-                      54, 46, 38, 30, 22, 14, 6, 61,
-                      53, 45, 37, 29, 21, 13, 5, 28,
-                      20, 12, 4
+        public static int[] PC1 = { 
+                      57, 49, 41, 33, 25, 17, 9, 1,
+                      58, 50, 42, 34, 26, 18, 10, 2,
+                      59, 51, 43, 35, 27, 19, 11, 3,
+                      60, 52, 44, 36, 63, 55, 47, 39,
+                      31, 23, 15, 7, 62, 54, 46, 38,
+                      30, 22, 14, 6, 61, 53, 45, 37,
+                      29, 21, 13, 5, 28, 20, 12, 4
         };
 
         // Таблица №2 для ключа 
@@ -124,7 +135,7 @@ namespace DES_WinForms
                       22, 11, 4, 25
         };
         // Sbox
-        public static int[,,] Sbox = {
+        public static int[,,] Sboxs = {
         {     { 14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7 },
               { 0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8 },
               { 4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0 },
