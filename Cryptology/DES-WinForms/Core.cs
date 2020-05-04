@@ -69,7 +69,7 @@ namespace DES_WinForms
             BitArray E = MatrixDES.permutation(new BitArray(_key), MatrixDES.PC1);
             for (int i = 0; i < 16; i++)
             {
-                //Делим 56битный ключ на 2 блока C и D, каждый сдвигается влево на N битов
+                //Делим 56 битный ключ на 2 блока C и D, каждый сдвигается влево на N битов
                 bool[] CD = new bool[E.Length];
                 E.CopyTo(CD, 0);
                 BitArray C = MatrixDES.leftCircularShift(new BitArray(CD.Take(28).ToArray()), MatrixDES.shiftBits[i]);
@@ -136,7 +136,7 @@ namespace DES_WinForms
             byte[] output = new byte[data.Length];
             BitArray bitBlock = new BitArray(data);
             //Начальная перестановка блока
-            bitBlock = MatrixDES.permutation(bitBlock, MatrixDES.IPblockEnd);
+            bitBlock = MatrixDES.permutation(bitBlock, MatrixDES.IPblock);
             byte[] temp = new byte[data.Length];
             //получение раундовых ключей.
             List<BitArray> roundKeys = getKeys(_key);
@@ -146,15 +146,15 @@ namespace DES_WinForms
                 BitArray left = new BitArray(temp.Take(data.Length / 2).ToArray());
                 BitArray Right = new BitArray(temp.Skip(data.Length / 2).Take(data.Length / 2).ToArray());
                 //Левая часть xor функция f(правая часть, ключ)
-                left = Right.Xor(Function(left, roundKeys[i]));
+                left = left.Xor(Function(Right, roundKeys[i]));
                 //Swap
                 bool[] _out = new bool[64];
-                left.CopyTo(_out, 0); //правая становиться левой
-                Right.CopyTo(_out, 32); //левая становиться правой
+                Right.CopyTo(_out, 0); //правая становиться левой
+                left.CopyTo(_out, 32); //левая становиться правой
                 temp = new byte[8];
                 new BitArray(_out).CopyTo(temp, 0);
             }
-            bitBlock = MatrixDES.permutation(new BitArray(temp), MatrixDES.IPblock);
+            bitBlock = MatrixDES.permutation(new BitArray(temp), MatrixDES.IPblockEnd);
             bitBlock.CopyTo(output, 0);
             return output;
         }
