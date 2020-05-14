@@ -8,42 +8,42 @@ using System.Windows.Forms;
 
 namespace DES_WinForms
 {
-    public class Core : Form
+    public class Core : DES
     {
         public static byte[] _message;
         public static byte[] _key;
         public static bool Reverse;
-        public static Dictionary<int, int> changesBitRound;
-        public static Dictionary<int, List<int[]>> changesBitRoundPositionText;
-        public static Dictionary<int, List<int[]>> changesBitRoundPositionKey;
-
+        public static bool OneBlockGrapth = true;
+        public static List<BitArray> RoundHistoryChangesBasicBlock;
+        public static List<int> KeyBit;
+        public static List<int> BlockBit;
         public Core(string message, string key, bool mode)
         {
             _message = Encoding.Default.GetBytes(CorrectMessage(message));
-            _key = CorrectKey(key);
+            _key = CorrectKey(key, 8);
             Reverse = mode;
         }
         static string CorrectMessage(string message)
         {
             while (Encoding.Default.GetBytes(message).Length % 8 != 0)
             {
-                message += " ";
+                message += "\0";
             }
             return message;
         }
-        static byte[] CorrectKey(string key)
+        public static byte[] CorrectKey(string key, int lengthKey)
         {
             byte[] bkey = Encoding.Default.GetBytes(key);
-            byte[] output = new byte[8];
-            if (bkey.Length > 8)
-                for (int i = 0; i < 8; i++)
+            byte[] output = new byte[lengthKey];
+            if (bkey.Length > lengthKey)
+                for (int i = 0; i < lengthKey; i++)
                     output[i] = bkey[i];
             else
             {
-                while (key.Length % 8 != 0)
-                    key += " ";
+                while (key.Length % lengthKey != 0)
+                    key += "\0";
                 bkey = Encoding.Default.GetBytes(key);
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < lengthKey; i++)
                     output[i] = bkey[i];
                 Encoding.Default.GetBytes(key).CopyTo(output, 0);
             }
@@ -51,7 +51,26 @@ namespace DES_WinForms
         }
         public static string Begin()
         {
+            DES.RoundHistoryChangesBasicBlock = new List<BitArray>();
+            KeyBit = new List<int>();
+            BlockBit = new List<int>();
             return Encoding.Default.GetString(GetBitArray());
+        }
+        public static byte[] GetBitArray()
+        {
+            byte[] output = new byte[_message.Length];
+            byte[] temp = new byte[8];
+            OneBlockGrapth = true;
+            for (int i = 0; i < _message.Length; i += 8)
+            {
+                if (!Reverse)
+                    temp = DES_Encryption(_message.Skip(i).Take(8).ToArray(), _key);
+                else
+                    temp = DES_Decryption(_message.Skip(i).Take(8).ToArray(), _key);
+                temp.CopyTo(output, i);
+                OneBlockGrapth = false;
+            }
+            return output;
         }
         public static byte ConvertToByte(BitArray Bits)//функция перевода бит в байт
         {
@@ -60,7 +79,6 @@ namespace DES_WinForms
             Bits.CopyTo(_byte, 0);
             return _byte[0];
         }
-        
         
         public static List<BitArray> getKeys(byte[] _key)
         {
@@ -72,8 +90,8 @@ namespace DES_WinForms
                 //Делим 56 битный ключ на 2 блока C и D, каждый сдвигается влево на N битов
                 bool[] CD = new bool[E.Length];
                 E.CopyTo(CD, 0);
-                BitArray C = MatrixDES.leftCircularShift(new BitArray(CD.Take(28).ToArray()), MatrixDES.shiftBits[i]);
-                BitArray D = MatrixDES.leftCircularShift(new BitArray(CD.Skip(28).Take(28).ToArray()), MatrixDES.shiftBits[i]);
+                BitArray C = MatrixDES.CircularShift(new BitArray(CD.Take(28).ToArray()), MatrixDES.shiftBits[i]);
+                BitArray D = MatrixDES.CircularShift(new BitArray(CD.Skip(28).Take(28).ToArray()),  MatrixDES.shiftBits[i]);
                 //Объединяем 2 части и отправляем на сжимающую перестановку(из 56 битов получаем 48 бит)
                 E = new BitArray(new BitArray(C.Cast<bool>().Concat(D.Cast<bool>()).ToArray()));
                 keys.Add(MatrixDES.permutation(E, MatrixDES.PC2));
@@ -81,20 +99,7 @@ namespace DES_WinForms
             }
             return keys;
         }
-        public static byte[] GetBitArray()
-        {
-            byte[] output = new byte[_message.Length];
-            byte[] temp = new byte[8];
-            for (int i = 0; i < _message.Length; i += 8)
-            {
-                if(!Reverse)
-                    temp = DES_Encryption(_message.Skip(i).Take(8).ToArray(), _key);
-                else
-                    temp = DES_Decryption(_message.Skip(i).Take(8).ToArray(), _key);
-                temp.CopyTo(output, i);
-            }
-            return output;
-        }
+       
         static BitArray Function(BitArray Right,BitArray roundKey )
         {
 
@@ -104,10 +109,14 @@ namespace DES_WinForms
             result = MatrixDES.permutation(result, MatrixDES.straightPermutation);
             return result;
         }
+
+
         static byte[] DES_Encryption(byte[] data, byte[] _key)
         {
+
             byte[] output = new byte[data.Length];
             BitArray bitBlock = new BitArray(data);
+            if(OneBlockGrapth) DES.RoundHistoryChangesBasicBlock.Add(bitBlock); //Для граффика
             //Начальная перестановка блока
             bitBlock = MatrixDES.permutation(bitBlock, MatrixDES.IPblock);
             byte[] temp = new byte[data.Length];
@@ -117,15 +126,17 @@ namespace DES_WinForms
             for (int i = 0; i < 16; i++)//Rounds is here
             {
                BitArray left = new BitArray(temp.Take(data.Length / 2).ToArray());
-               BitArray Right = new BitArray(temp.Skip(data.Length / 2).Take(data.Length / 2).ToArray());
+               BitArray temp1 = new BitArray(temp.Skip(data.Length / 2).Take(data.Length / 2).ToArray());
+               BitArray Right = temp1;
                //Левая часть xor функция f(правая часть, ключ)
-               left = left.Xor(Function(Right, roundKeys[i]));
+               left = left.Xor(Function(temp1, roundKeys[i]));
                //Swap
                bool[] _out = new bool[64];
-               Right.CopyTo(_out, 0); //правая становиться левой
-               left.CopyTo(_out, 32); //левая становиться правой
+               Right.CopyTo(_out, 0);
+               left.CopyTo(_out, 32); 
                temp = new byte[8];
                new BitArray(_out).CopyTo(temp, 0);
+                if (OneBlockGrapth) DES.RoundHistoryChangesBasicBlock.Add(new BitArray(temp));
             }
             bitBlock = MatrixDES.permutation(new BitArray(temp), MatrixDES.IPblockEnd);
             bitBlock.CopyTo(output, 0);
@@ -143,14 +154,15 @@ namespace DES_WinForms
             bitBlock.CopyTo(temp, 0);
             for (int i = 15; i >= 0 ; i--)//Rounds is here
             {
-                BitArray left = new BitArray(temp.Take(data.Length / 2).ToArray());
+                BitArray temp1 = new BitArray(temp.Take(data.Length / 2).ToArray());
                 BitArray Right = new BitArray(temp.Skip(data.Length / 2).Take(data.Length / 2).ToArray());
+                BitArray left = temp1;
                 //Левая часть xor функция f(правая часть, ключ)
-                left = left.Xor(Function(Right, roundKeys[i]));
+                Right = Right.Xor(Function(temp1, roundKeys[i]));
                 //Swap
                 bool[] _out = new bool[64];
-                Right.CopyTo(_out, 0); //правая становиться левой
-                left.CopyTo(_out, 32); //левая становиться правой
+                Right.CopyTo(_out, 0);
+                left.CopyTo(_out, 32);
                 temp = new byte[8];
                 new BitArray(_out).CopyTo(temp, 0);
             }

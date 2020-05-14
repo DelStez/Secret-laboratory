@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29926.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVLandRedBlackTrees", "AVLandRedBlackTrees.csproj", "{EC3A97E2-E4AC-4A62-B76D-80985EF7187B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC3A97E2-E4AC-4A62-B76D-80985EF7187B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3A97E2-E4AC-4A62-B76D-80985EF7187B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3A97E2-E4AC-4A62-B76D-80985EF7187B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3A97E2-E4AC-4A62-B76D-80985EF7187B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D17CF98-4BD8-4453-AF0B-8967177DCDE9}
+	EndGlobalSection
+EndGlobal

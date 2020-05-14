@@ -30,6 +30,24 @@ namespace DES_WinForms
             return output;
 
         }
+        private static void CircularRightShift(int[] HKey)
+        {
+            int i, LastBit = HKey[27];
+            for (i = 27; i >= 1; --i)
+            {
+                HKey[i] = HKey[i - 1];
+            }
+            HKey[i] = LastBit;
+        }
+        private static void CircularLeftShift(int[] HKey)
+        {
+            int i, FirstBit = HKey[0];
+            for (i = 0; i < 27; i++)
+            {
+                HKey[i] = HKey[i + 1];
+            }
+            HKey[i] = FirstBit;
+        }
         public static BitArray permutation(BitArray getBlock, int[] block)
         {
             BitArray output = new BitArray(block.Length);
@@ -39,7 +57,7 @@ namespace DES_WinForms
             }
             return output;
         }
-        public static BitArray leftCircularShift(BitArray getPart, int start )
+        public static BitArray CircularShift(BitArray getPart, int start )
         {
             int n = getPart.Length;
             int[] perm = new int[n];
@@ -50,6 +68,7 @@ namespace DES_WinForms
                 getPart = permutation(getPart, perm);
             return getPart;
         }
+
         private static int GetIntValues(BitArray bitArray)
         {
             int[] result = new int[1];
@@ -177,9 +196,6 @@ namespace DES_WinForms
               { 7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8 },
               { 2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11 } }
         };
-        public static int[] shiftBits = { 
-                            1, 1, 2, 2, 2, 2, 2, 2,
-                            1, 2, 2, 2, 2, 2, 2, 1
-        };
+        public static int[] shiftBits = { 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 };
     }
 }

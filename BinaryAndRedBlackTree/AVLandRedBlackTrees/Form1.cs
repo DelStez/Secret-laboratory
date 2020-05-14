@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DES_WinForms
+namespace AVLandRedBlackTrees
 {
-    public partial class grapths : Form
+    public partial class Form1 : Form
     {
-        public grapths()
+        public Form1()
         {
             InitializeComponent();
         }
