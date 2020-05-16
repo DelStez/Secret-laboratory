@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace AVLandRedBlackTrees.Core
 {
-    public class Node
+   public class BSTNode
     {
         public int key;
-        public Node parent;
-        public Node leftChild;
-        public Node rightChild;
+        public BSTNode parent;
+        public BSTNode leftChild;
+        public BSTNode rightChild;
         private readonly int deepth;
-        public Node(Node parent, int keyValue)
+        
+        public BSTNode(BSTNode parent, int keyValue)
         {
             this.parent = parent;
             this.key = keyValue;
@@ -26,11 +27,11 @@ namespace AVLandRedBlackTrees.Core
             else
                 this.deepth = this.parent.deepth + 1;
         }
-        public Node Parrent => parent;
+        public BSTNode Parrent => parent;
         public int KeyValue => key;
         public int Deepth => deepth;
-        public Node LeftNode { get => leftChild; set => leftChild = value; }
-        public Node RightNode { get => rightChild; set => rightChild = value; }
+        public BSTNode LeftBSTNode { get => leftChild; set => leftChild = value; }
+        public BSTNode RightBSTNode { get => rightChild; set => rightChild = value; }
 
         public bool IsRoot() { return this.Parrent == null; }
     }
