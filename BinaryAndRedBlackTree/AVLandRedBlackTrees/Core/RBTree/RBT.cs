@@ -238,6 +238,15 @@ namespace AVLandRedBlackTrees.Core
             if (item != null)
                 item.colour = Color.Black;
         }
+        private RBTNode Maximum(RBTNode X)
+        {
+            while(X.right.right != null)
+                X = X.right;
+
+            if (X.right.left != null)
+                X = X.right.left;
+            return X;
+        }
         private RBTNode Minimum(RBTNode X)
         {
             while (X.left.left != null)

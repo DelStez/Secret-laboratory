@@ -11,9 +11,9 @@ namespace PlayFer
         
         static void Main(string[] args)
         {
-            string alfabet = "абвгдежзиклмнопрстуфхцчшщъыэюя";
-            string chypher = "УЕНАЕЭМЧЗПФТКСЪИАРУЕПЕСЯЕХТИСЩГХМЖФЗЧБГЩКМЮАЕЪ".ToLower(); 
-            string key = "МАТЕРИЯ".ToLower();
+            string alfabet = "абвгдежзйиклмнопрстуфхцчшщъыэюя";
+            string chypher = "ХБСПЙЩБВБЛПРЕМОПМЧЖВ".ToLower(); 
+            string key = "СИСТЕМА".ToLower();
             for (int i = 0; i < chypher.Length-1; i++)
                 if (chypher[i]!= chypher.Length && chypher[i] == chypher[i + 1])
                     chypher = chypher.Insert(i, "#");
@@ -22,7 +22,8 @@ namespace PlayFer
                 chypher += "#";
             for (int i = 0; i < key.Length; i++)
             {
-                alfabet = alfabet.Remove(alfabet.IndexOf(key[i]), 1);
+                if(alfabet.Contains(key[i].ToString()))
+                    alfabet = alfabet.Remove(alfabet.IndexOf(key[i]), 1);
             }
             string s = key + alfabet;
             char[,] alphavit = {
