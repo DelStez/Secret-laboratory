@@ -12,7 +12,30 @@ namespace AVLandRedBlackTrees.Core
         public RBTNode root;
         //private int deepth;
 
-        public RBTNode Find(int key) {}
+        public RBTNode Find(int key)
+        {
+            bool isFound = false;
+            RBTNode temp = root;
+            RBTNode item = null;
+            while (!isFound)
+            {
+                if (temp == null)
+                    break;
+                if (key < temp.key)
+                    temp = temp.left;
+                if (key > temp.key)
+                    temp = temp.right;
+                if (key == temp.key)
+                {
+                    isFound = true;
+                    item = temp;
+                }
+            }
+            if (isFound)//если найден
+                return temp;
+            else // иначе
+                return null;
+        }
         public void leftRotation(RBTNode currentNode)
         {
             RBTNode parentThis = currentNode.right;
@@ -140,7 +163,7 @@ namespace AVLandRedBlackTrees.Core
             RBTNode x = null; RBTNode y = null;
             if (item == null) return;
             if (item.left == null || item.right == null) y = item;
-            else y = TreeSuccessor();//!!!!!!!!
+            else y = TreeSuccessor(item);//!!!!!!!!
             if (y.left != null) x = y.left;
             else x = y.right;
             if (x != null) x.parent = y;
@@ -215,6 +238,29 @@ namespace AVLandRedBlackTrees.Core
             if (item != null)
                 item.colour = Color.Black;
         }
+        private RBTNode Minimum(RBTNode X)
+        {
+            while (X.left.left != null)
+                X = X.left;
+            
+            if (X.left.right != null)
+                X = X.left.right;
+            return X;
+        }
+        private RBTNode TreeSuccessor(RBTNode current)
+        {
+            if (current.left == null)
+            {
+                RBTNode Y = current.parent;
+                while (Y != null && current == Y.right)
+                {
+                    current = Y;
+                    Y = Y.parent;
+                }
+                return Y;
+            }
+            else
+                return Minimum(current);
+        }
     }
-    
 }

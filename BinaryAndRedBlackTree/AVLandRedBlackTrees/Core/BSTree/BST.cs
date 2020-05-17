@@ -13,7 +13,6 @@ namespace AVLandRedBlackTrees.Core
 
         public BST()
         {
-
             root = null;
             deepth = 0;
         }
