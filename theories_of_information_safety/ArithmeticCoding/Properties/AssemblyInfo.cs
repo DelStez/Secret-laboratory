@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-[assembly: AssemblyTitle("RSA")]
+[assembly: AssemblyTitle("ArithmeticCoding")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RSA")]
+[assembly: AssemblyProduct("ArithmeticCoding")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-[assembly: Guid("c35dced2-3be7-4824-b48d-2bd340f5bda4")]
+[assembly: Guid("45cf7f82-bdce-4658-b2dd-eb4652fc9a0c")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

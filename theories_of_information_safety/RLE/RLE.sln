@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29905.134
+VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSA", "RSA.csproj", "{C35DCED2-3BE7-4824-B48D-2BD340F5BDA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RLE", "RLE.csproj", "{051309DE-D450-44A5-A5A9-12FC78AEAA45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C35DCED2-3BE7-4824-B48D-2BD340F5BDA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C35DCED2-3BE7-4824-B48D-2BD340F5BDA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C35DCED2-3BE7-4824-B48D-2BD340F5BDA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C35DCED2-3BE7-4824-B48D-2BD340F5BDA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051309DE-D450-44A5-A5A9-12FC78AEAA45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051309DE-D450-44A5-A5A9-12FC78AEAA45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051309DE-D450-44A5-A5A9-12FC78AEAA45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051309DE-D450-44A5-A5A9-12FC78AEAA45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9942E7AE-1592-4FF6-B4C0-BFC5F8D5518E}
+		SolutionGuid = {D36002C0-8112-40AF-BEB3-442D21D5EDD6}
 	EndGlobalSection
 EndGlobal

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C35DCED2-3BE7-4824-B48D-2BD340F5BDA4}</ProjectGuid>
+    <ProjectGuid>{051309DE-D450-44A5-A5A9-12FC78AEAA45}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RSA</RootNamespace>
-    <AssemblyName>RSA</AssemblyName>
+    <RootNamespace>RLE</RootNamespace>
+    <AssemblyName>RLE</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
