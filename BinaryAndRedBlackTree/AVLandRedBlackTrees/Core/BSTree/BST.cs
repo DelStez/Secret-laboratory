@@ -18,7 +18,7 @@ namespace AVLandRedBlackTrees.Core
         }
         public BSTNode Root { get => root; set => root = value; }
         public int Deepth { get => deepth; set { if (Deepth < value) this.deepth = value; } }
-        private BSTNode SearchBSTNode(int key)
+        public BSTNode SearchBSTNode(int key)
         {
             BSTNode currentBSTNode = this.Root;
             while (currentBSTNode == null || currentBSTNode.key != key)
@@ -30,7 +30,7 @@ namespace AVLandRedBlackTrees.Core
             }
             return currentBSTNode;
         }
-        private BSTNode CreateBSTNode(int keyValue)
+        public BSTNode CreateBSTNode(int keyValue)
         {
             BSTNode currentBSTNode = root;
             BSTNode oldBSTNode = null;
@@ -45,7 +45,7 @@ namespace AVLandRedBlackTrees.Core
             }
             return AddBSTNode(keyValue, oldBSTNode);
         }
-        private BSTNode AddBSTNode(int key, BSTNode oldBSTNode) // Реализация без использования информации о родителе
+        public BSTNode AddBSTNode(int key, BSTNode oldBSTNode) // Реализация без использования информации о родителе
         {
             BSTNode newBSTNode = this.Root;
             if (oldBSTNode == null)
@@ -57,7 +57,7 @@ namespace AVLandRedBlackTrees.Core
             deepth = newBSTNode.Deepth;
             return newBSTNode;
         }
-        private BSTNode Remove(BSTNode root, int key) // Рекурсивная реализация
+        public BSTNode Remove(BSTNode root, int key) // Рекурсивная реализация
         {
             if (root == null)
                 return root;

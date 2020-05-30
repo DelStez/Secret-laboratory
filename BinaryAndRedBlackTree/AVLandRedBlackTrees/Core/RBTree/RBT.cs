@@ -1,5 +1,4 @@
-﻿using AVLandRedBlackTrees.Core.RBTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace AVLandRedBlackTrees.Core
 {
+    public enum Color { Red, Black }
     public class RBT
     {
-        public RBTNode root;
-        //private int deepth;
+        public class RBTNode
+        {
+            public int key;
+            public RBTNode left;
+            public RBTNode right;
+            public RBTNode parent;
+            public Color colour;
 
+            public RBTNode(int key) { this.key = key; }
+            public RBTNode(Color colour) { this.colour = colour; }
+            public RBTNode(int key, Color colour) { this.key = key; this.colour = colour; }
+        }
+        
+        public RBTNode root;
+        public RBT() { }
         public RBTNode Find(int key)
         {
             bool isFound = false;
@@ -43,13 +55,18 @@ namespace AVLandRedBlackTrees.Core
             if (parentThis.left != null)
                 parentThis.left.parent = currentNode;
             if (parentThis != null)
-                parentThis.parent = currentNode.parent;
-            if (currentNode.parent == null)
-                root = currentNode;
-            if (currentNode == currentNode.parent.left)
-                currentNode.parent.left = parentThis;
+                parentThis.parent = currentNode.parent; 
+            if (currentNode.parent != null)
+            {
+                if (currentNode == currentNode.parent.left)
+                    currentNode.parent.left = parentThis;
+                else
+                    currentNode.parent.right = parentThis;
+            }
             else
-                currentNode.parent.left = parentThis;
+            {
+                    root = currentNode;
+            }
             parentThis.left = currentNode;
             if (parentThis != null)
                 currentNode.parent = currentNode;
@@ -62,12 +79,17 @@ namespace AVLandRedBlackTrees.Core
                 parentThis.right.parent = currentNode;
             if (parentThis != null)
                 parentThis.parent = currentNode.parent;
-            if (currentNode.parent == null)
-                root = currentNode;
-            if (currentNode == currentNode.parent.right)
-                currentNode.parent.right = parentThis;
+            if (currentNode.parent != null)
+            {
+                if (currentNode == currentNode.parent.right)
+                    currentNode.parent.right = parentThis;
+                else
+                    currentNode.parent.left = parentThis;
+            }
             else
-                currentNode.parent.right = parentThis;
+            {
+                root = currentNode;
+            }
             parentThis.right = currentNode;
             if (parentThis != null)
                 currentNode.parent = currentNode;
