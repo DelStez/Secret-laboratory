@@ -12,98 +12,260 @@ namespace AVLandRedBlackTrees.Core
         {
             public int key;
             public BSTNode parent;
-            public BSTNode leftChild;
-            public BSTNode rightChild;
-            private readonly int deepth;
-
-            public BSTNode(BSTNode parent, int keyValue)
+            public BSTNode left;
+            public BSTNode right;
+            public BSTNode(int key)
             {
-                this.parent = parent;
-                this.key = keyValue;
-
-                this.leftChild = null;
-                this.rightChild = null;
-
-                if (this.parent == null)
-                    this.deepth = 0;
-                else
-                    this.deepth = this.parent.deepth + 1;
+                this.key = key;
             }
-            public BSTNode Parrent => parent;
-            public int KeyValue => key;
-            public int Deepth => deepth;
-            public BSTNode LeftBSTNode { get => leftChild; set => leftChild = value; }
-            public BSTNode RightBSTNode { get => rightChild; set => rightChild = value; }
-
-            public bool IsRoot() { return this.Parrent == null; }
+            
         }
         public static BSTNode root;
-        public int deepth;
 
         public BST()
         {
             root = null;
-            deepth = 0;
         }
-        public BSTNode Root { get => root; set => root = value; }
-        public int Deepth { get => deepth; set { if (Deepth < value) this.deepth = value; } }
-        public BSTNode SearchBSTNode(int key)
+       
+        public void Insert(int key)
         {
-            BSTNode currentBSTNode = this.Root;
-            while (currentBSTNode == null || currentBSTNode.key != key)
-            {
-                if (currentBSTNode.key > key)
-                    currentBSTNode = currentBSTNode.rightChild;
-                else
-                    currentBSTNode = currentBSTNode.leftChild;
-            }
-            return currentBSTNode;
-        }
-        public BSTNode CreateBSTNode(int keyValue)
-        {
-            BSTNode currentBSTNode = root;
-            BSTNode oldBSTNode = null;
-
-            while (currentBSTNode != null)
-            {
-                oldBSTNode = currentBSTNode;
-                if (keyValue < currentBSTNode.key)
-                    currentBSTNode = currentBSTNode.leftChild;
-                else
-                    currentBSTNode = currentBSTNode.rightChild;
-            }
-            return AddBSTNode(keyValue, oldBSTNode);
-        }
-        public BSTNode AddBSTNode(int key, BSTNode oldBSTNode) // Реализация без использования информации о родителе
-        {
-            BSTNode newBSTNode = this.Root;
-            if (oldBSTNode == null)
-                Root = newBSTNode;
-            else if (key > oldBSTNode.key)
-                oldBSTNode.rightChild = newBSTNode;
-            else
-                oldBSTNode.leftChild = newBSTNode;
-            deepth = newBSTNode.Deepth;
-            return newBSTNode;
-        }
-        public BSTNode Remove(BSTNode root, int key) // Рекурсивная реализация
-        {
+            BSTNode newBSTNode = new BSTNode(key);
             if (root == null)
-                return root;
-            if (key < root.key)
-                root.leftChild = Remove(root.leftChild, key);
-            else if (key > root.key)
-                root.rightChild = Remove(root.rightChild, key);
+                root = newBSTNode;
             else
             {
-                if (root.leftChild != null)
-                    root = root.leftChild;
-                else if (root.rightChild != null)
-                    root = root.rightChild;
-                else
-                    root = null;
+                BSTNode current = root;
+                BSTNode parent = null;
+                while (current != null)
+                {
+                    parent = current;
+                    if (key < current.key)
+                    {
+                        current = current.left;
+                        if (current == null)
+                            parent.left = newBSTNode;
+                    }
+                    else
+                    {
+                        current = current.right;
+                        if (current == null)
+                            parent.right = newBSTNode;
+                    }
+                }
             }
-            return root;
+        }
+        public void Remove(int key)
+        {
+            if (root == null || find(key) == false)
+            {
+                return;
+            }
+            else
+            {
+                Private_Remove(key);
+                return;
+            }
+        }
+        public bool find(int target)
+        {
+            if (root != null && regular_find(target) != false)
+            {
+                return true;
+            }
+            else
+            { return false; }
+        }
+        private bool regular_find(int target)
+        {
+            bool isFound = false;
+            BSTNode current = root;
+            while (current != null && isFound == false)
+            {
+                if (current.key == target)
+                {
+                    isFound = true;
+                }
+                if (target < current.key)
+                {
+                    if (current.left == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        current = current.left;
+                    }
+                }
+                if (target > current.key)
+                {
+                    if (current.right == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        current = current.right;
+                    }
+                }
+            }
+            if (isFound == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private int Private_Remove(int target)
+        {
+            int temp;
+            BSTNode targetNode = GoToTarget(target);
+            if (targetNode == root)
+            {
+                if (targetNode.left == null && targetNode.right == null)
+                {
+                    temp = root.key;
+                    root = null;
+                    return temp;
+                }
+                if (targetNode.left != null)
+                {
+                    BSTNode current = root.left;
+
+                    temp = root.key;
+                    if (root.left.right == null)
+                    { root.key = root.left.key; }
+                    else
+                    {
+                        while (current != null)
+                        { 
+                            if (current.right.right == null)
+                            { root.key = current.right.key; break; }
+                            current = current.right;
+                        }
+                        if (current.right != null) { current.right = current.right.right; }
+                        else { current.right = null; }
+                        return temp;
+                    }
+
+                    if (root.left.left == null)
+                    {
+                        root.left = null;
+                    }
+                    else { root.left = root.left.left; }
+                    return temp;
+                }
+                if (targetNode.right != null)
+                {
+                    temp = root.key;
+                    root.key = root.right.key;
+                    if (root.right.right == null)
+                    {
+                        root.right = null;
+                    }
+                    else { root.right = root.right.right; }
+                    return temp;
+                }
+            }
+            if (targetNode.left == null && targetNode.right == null)
+            {
+                if (ParentOfTarget(targetNode).left == targetNode)
+                {
+                    temp = targetNode.key;
+                    ParentOfTarget(targetNode).left = null;
+                }
+                else
+                {
+                    temp = targetNode.key;
+                    ParentOfTarget(targetNode).right = null;
+                }
+                return temp;
+            }
+            if (targetNode.left != null && targetNode.right == null)
+            {
+                temp = targetNode.key;
+                ParentOfTarget(targetNode).right = targetNode.left;
+                return temp;
+
+            }
+            if (targetNode.right != null && targetNode.left == null)
+            {
+                temp = targetNode.key;
+                if (ParentOfTarget(targetNode) == root)
+                {
+                    ParentOfTarget(targetNode).left = targetNode.right;
+                }
+                else
+                    ParentOfTarget(targetNode).right = targetNode.right;
+
+                return temp;
+
+            }
+            if (targetNode.left != null && targetNode.right != null)
+            {
+                if (ParentOfTarget(targetNode).left == targetNode)
+                {
+                    temp = targetNode.key;
+                    targetNode.key = targetNode.left.key;
+                    targetNode.left = null;
+                    return temp;
+                }
+                else
+                {
+                    temp = targetNode.key;
+                    targetNode.key = targetNode.left.key;
+                    if (targetNode.left.left != null)
+                    {
+                        targetNode.left = targetNode.left.left;
+                    }
+                    else
+                        targetNode.left = null;
+                    return temp;
+                }
+
+            }
+            return Int32.MinValue;
+        }
+        private BSTNode ParentOfTarget(BSTNode target)
+        {
+            BSTNode current = root;
+            BSTNode parent = null;
+            while (current != null)
+            {
+                if (current.left == target || current.right == target)
+                {
+                    parent = current;
+                    break;
+                }
+                if (target.key < current.key && current.left != target)
+                    current = current.left;
+                if (target.key > current.key && current.right != target)
+                    current = current.right;
+            }
+            return parent;
+        }
+        private BSTNode GoToTarget(int target)
+        {
+            BSTNode c = root;
+            BSTNode returnThis = null;
+            while (c != null)
+            {
+                if (target < c.key)
+                {
+                    c = c.left;
+                }
+                if (target == c.key)
+                {
+                    returnThis = c;
+                    break;
+                }
+                if (target > c.key)
+                {
+                    c = c.right;
+                }
+            }
+            return returnThis;
         }
     }
 }

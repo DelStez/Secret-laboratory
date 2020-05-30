@@ -20,7 +20,7 @@ namespace AVLandRedBlackTrees.Core.AVL
         }
         AVLNode root;
         public AVL() { }
-        private void Add(int key)
+        public void Add(int key)
         {
             AVLNode newItem = new AVLNode(key);
             if (root == null)
@@ -73,7 +73,7 @@ namespace AVLandRedBlackTrees.Core.AVL
             int bFactor = l - r;
             return bFactor;
         }
-        private void Remove(int target)
+        public void Remove(int target)
         {
             root = Delete(root, target);
         }
@@ -136,36 +136,44 @@ namespace AVLandRedBlackTrees.Core.AVL
             }
             return current;
         }
-        private void Find(int data)
+        public void Find(int data)
         {
-            if (Find(data, root).key == data)
+            if (Find(data, root) != null)
             {
                 //Элемент найден
+               // использовать листбоксы
             }
             else
             {
+                // использовать листбоксы
                 //Не был найден
             }
 
         }
         private AVLNode Find(int target, AVLNode current)
         {
-            if (target < current.key)
+            if (current != null)
             {
-                if (target == current.key)
+                if (target < current.key)
                 {
-                    return current;
+                    if (target == current.key)
+                    {
+                        return current;
+                    }
+                    else
+                        return Find(target, current.left);
                 }
                 else
-                    return Find(target, current.left);
+                {
+                    if (target == current.key)
+                        return current;
+                    else
+                        return Find(target, current.right);
+                }
             }
             else
-            {
-                if (target == current.key)
-                    return current;
-                else
-                    return Find(target, current.right);
-            }
+                return null;
+            
         }
         private int GetHeight(AVLNode current)
         {
