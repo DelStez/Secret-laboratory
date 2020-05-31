@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,52 +50,43 @@ namespace AVLandRedBlackTrees.Core
             else // иначе
                 return null;
         }
-        public void leftRotation(RBTNode currentNode)
+        public void leftRotation(RBTNode x)
         {
-            RBTNode parentThis = currentNode.right;
-            currentNode.right = parentThis.left;
-            if (parentThis.left != null)
-                parentThis.left.parent = currentNode;
-            if (parentThis != null)
-                parentThis.parent = currentNode.parent; 
-            if (currentNode.parent != null)
-            {
-                if (currentNode == currentNode.parent.left)
-                    currentNode.parent.left = parentThis;
-                else
-                    currentNode.parent.right = parentThis;
-            }
+            RBTNode y = x.right;
+
+            x.right = y.left;
+            if (y.left != null)
+                y.left.parent = x;
+            y.parent = x.parent;
+
+            if (x == root)
+                root = y;
+            else if (x == x.parent.left)
+                x.parent.left = y;
             else
-            {
-                    root = currentNode;
-            }
-            parentThis.left = currentNode;
-            if (parentThis != null)
-                currentNode.parent = currentNode;
+                x.parent.right = y;
+            y.left = x;
+            x.parent = y;
         }
-        public void rightRotation(RBTNode currentNode)
+        public void rightRotation(RBTNode x)
         {
-            RBTNode parentThis = currentNode.left;
-            currentNode.left = parentThis.right;
-            if (parentThis.right != null)
-                parentThis.right.parent = currentNode;
-            if (parentThis != null)
-                parentThis.parent = currentNode.parent;
-            if (currentNode.parent != null)
-            {
-                if (currentNode == currentNode.parent.right)
-                    currentNode.parent.right = parentThis;
-                else
-                    currentNode.parent.left = parentThis;
-            }
+            RBTNode y = x.left;
+
+            x.left = y.right;
+            if (y.right != null)
+                y.right.parent = x;
+            y.parent = x.parent;
+
+            if (x == root)
+                root = y;
+            else if (x == x.parent.right)
+                x.parent.right = y;
             else
-            {
-                root = currentNode;
-            }
-            parentThis.right = currentNode;
-            if (parentThis != null)
-                currentNode.parent = currentNode;
+                x.parent.left = y;
+            y.right = x;
+            x.parent = y;
         }
+
         public void Insert(int item)
         {
             RBTNode newItem = new RBTNode(item);
@@ -123,163 +113,182 @@ namespace AVLandRedBlackTrees.Core
                 Y.left = newItem;
             else
                 Y.right = newItem;
-            
+
             newItem.left = null;
             newItem.right = null;
             newItem.colour = Colors.Red;
             InsertFixUp(newItem);
         }
-        public void InsertFixUp(RBTNode item)
+        public void InsertFixUp(RBTNode x)
         {
             //проверка свойств КБ-дерева
-            while (item != root && item.parent.colour == Colors.Red)
+            x.colour = Colors.Red;
+            while (x != root && x.parent.colour == Colors.Red)
             {
-                if (item.parent == item.parent.parent.left)
+                if (x.parent == x.parent.parent.left)
                 {
-                    RBTNode y = item.parent.parent.right;
-                    if (y != null && y.colour == Colors.Red)// "дядя" - красный узел
+                    RBTNode y = x.parent.parent.right;
+                    if (y != null && y.colour == Colors.Red)
                     {
-                        item.parent.colour = Colors.Black;
+                        x.parent.colour = Colors.Black;
                         y.colour = Colors.Black;
-                        item.parent.parent.colour = Colors.Red;
-                        item = item.parent.parent;
-                    }
-                    else  // "дядя" - черный узел
-                    {
-                        if (item == item.parent.right)
-                        {
-                            item = item.parent;
-                            leftRotation(item);
-                        }
-                        item.parent.colour = Colors.Black;
-                        item.parent.parent.colour = Colors.Red;
-                        rightRotation(item.parent.parent);
-                    }
-
-                }
-                else
-                {
-                    RBTNode y = item.parent.parent.left;
-                    if (y != null && y.colour == Colors.Black)
-                    {
-                        item.parent.colour = Colors.Red;
-                        y.colour = Colors.Red;
-                        item.parent.parent.colour = Colors.Black;
-                        item = item.parent.parent;
+                        x.parent.parent.colour = Colors.Red;
+                        x = x.parent.parent;
                     }
                     else
                     {
-                        if (item == item.parent.left)
+                        if (x == x.parent.right)
                         {
-                            item = item.parent;
-                            rightRotation(item);
+                            x = x.parent;
+                            leftRotation(x);
                         }
-                        item.parent.colour = Colors.Black;
-                        item.parent.parent.colour = Colors.Red;
-                        leftRotation(item.parent.parent);
+                        x.parent.colour = Colors.Black;
+                        x.parent.parent.colour = Colors.Red;
+                        rightRotation(x.parent.parent);
                     }
                 }
-                root.colour = Colors.Black;
+                else
+                {
+                    RBTNode y = x.parent.parent.left;
+                    if (y != null && y.colour == Colors.Red)
+                    {
+                        x.parent.colour = Colors.Black;
+                        y.colour = Colors.Black;
+                        x.parent.parent.colour = Colors.Red;
+                        x = x.parent.parent;
+                    }
+                    else
+                    {
+                        if (x == x.parent.left)
+                        {
+                            x = x.parent;
+                            rightRotation(x);
+                        }
+                        x.parent.colour = Colors.Black;
+                        x.parent.parent.colour = Colors.Red;
+                        leftRotation(x.parent.parent);
+                    }
+                }
             }
+            root.colour = Colors.Black;
         }
+
         public void Remove(int key)
         {
             RBTNode item = Find(key);
-            RBTNode x = null; RBTNode y = null;
-            if (item == null) return;
+            RBTNode X = null;
+            RBTNode Y = null;
+
+            if (item == null)
+            {
+                // ничего не удаленно
+                return;
+            }
             if (item.left == null || item.right == null)
             {
-                y = item;
+                Y = item;
             }
             else
             {
-                y = TreeSuccessor(item);
-                if (y.left != null)
-                    x = y.left;
-                else
-                    x = y.right;
+                Y = TreeSuccessor(item);
             }
-            if (x != null) x.parent = y;
-            if (y.parent != null)
+            if (Y.left != null)
             {
-                
-                if (y == y.parent.left)
-                    y.parent.left = x;
-                else
-                    y.parent.right = x;
+                X = Y.left;
             }
             else
-                root = x; 
-            
-            if (y != item)
-                item.key = y.key;
-            if (y.colour == Colors.Black)
-                RemoveFixUp(x);
-            
+            {
+                X = Y.right;
+            }
+            if (X != null)
+            {
+                X.parent = Y;
+            }
+            if (Y.parent == null)
+            {
+                root = X;
+            }
+            else if (Y == Y.parent.left)
+            {
+                Y.parent.left = X;
+            }
+            else
+            {
+                Y.parent.left = X;
+            }
+            if (Y != item)
+            {
+                item.key = Y.key;
+            }
+            if (Y.colour == Colors.Black)
+            {
+                RemoveFixUp(X);
+            }
+
         }
-        public void RemoveFixUp(RBTNode item)
+        public void RemoveFixUp(RBTNode X)
         {
-            while (item != null && item != root && item.colour ==Colors.Black )
+            while (X != null && X != root && X.colour == Colors.Black)
             {
-                if (item == item.parent)
+                if (X == X.parent.left)
                 {
-                    RBTNode w = item.parent.right;
-                    if (w.colour == Colors.Red)
+                    RBTNode W = X.parent.right;
+                    if (W.colour == Colors.Red)
                     {
-                        w.colour = Colors.Black;
-                        item.parent.colour = Colors.Red;
-                        leftRotation(item.parent);
-                        w = item.parent.right;
+                        W.colour = Colors.Black;
+                        X.parent.colour = Colors.Red;
+                        leftRotation(X.parent);
+                        W = X.parent.right;
                     }
-                    if (w.left.colour == Colors.Black && w.right.colour == Colors.Black)
+                    if (W.left.colour == Colors.Black && W.right.colour == Colors.Black)
                     {
-                        w.colour = Colors.Red;
-                        item = item.parent;
+                        W.colour = Colors.Red;
+                        X = X.parent;
                     }
-                    else if (w.right.colour == Colors.Black)
+                    else if (W.right.colour == Colors.Black)
                     {
-                        w.left.colour = Colors.Black;
-                        w.colour = Colors.Red;
-                        rightRotation(w);
-                        w = item.parent.right;
+                        W.left.colour = Colors.Black;
+                        W.colour = Colors.Red;
+                        rightRotation(W);
+                        W = X.parent.right;
                     }
-                    w.colour = item.parent.colour;
-                    item.parent.colour = Colors.Black;
-                    w.right.colour = Colors.Black;
-                    leftRotation(item.parent);
-                    item = root;
+                    W.colour = X.parent.colour;
+                    X.parent.colour = Colors.Black;
+                    W.right.colour = Colors.Black;
+                    leftRotation(X.parent);
+                    X = root;
                 }
                 else
                 {
-                    RBTNode w = item.parent.left;
-                    if (w.colour == Colors.Black)
+                    RBTNode W = X.parent.left;
+                    if (W.colour == Colors.Red)
                     {
-                        w.colour = Colors.Red;
-                        item.parent.colour = Colors.Black;
-                        rightRotation(item.parent);
-                        w = item.parent.left;
+                        W.colour = Colors.Black;
+                        X.parent.colour = Colors.Red;
+                        rightRotation(X.parent);
+                        W = X.parent.left;
                     }
-                    if (w.left.colour == Colors.Black && w.right.colour == Colors.Black)
+                    if (W.right.colour == Colors.Black && W.left.colour == Colors.Black)
                     {
-                        w.colour = Colors.Black;
-                        item = item.parent;
+                        W.colour = Colors.Black;
+                        X = X.parent;
                     }
-                    else if (w.left.colour == Colors.Black)
+                    else if (W.left.colour == Colors.Black)
                     {
-                        w.right.colour = Colors.Black;
-                        w.colour = Colors.Red;
-                        leftRotation(w);
-                        w = item.parent.left;
+                        W.right.colour = Colors.Black;
+                        W.colour = Colors.Red;
+                        leftRotation(W);
+                        W = X.parent.left;
                     }
-                    w.colour = item.parent.colour;
-                    item.parent.colour = Colors.Black;
-                    w.left.colour = Colors.Black;
-                    rightRotation(item.parent);
-                    item = root;
+                    W.colour = X.parent.colour;
+                    X.parent.colour = Colors.Black;
+                    W.left.colour = Colors.Black;
+                    rightRotation(X.parent);
+                    X = root;
                 }
             }
-            if (item != null)
-                item.colour = Colors.Black;
+            if (X != null)
+                X.colour = Colors.Black;
         }
         private RBTNode Maximum(RBTNode X)
         {
