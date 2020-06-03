@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVLandRedBlackTrees.Core.AVL
+namespace AVLandRedBlackTrees.Core
 {
     public class AVL
     {
@@ -18,7 +18,7 @@ namespace AVLandRedBlackTrees.Core.AVL
                 this.key = key;
             }
         }
-        AVLNode root;
+        public AVLNode root;
         public AVL() { }
         public void Add(int key)
         {

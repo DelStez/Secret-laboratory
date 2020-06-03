@@ -510,7 +510,9 @@ namespace AVLandRedBlackTrees.Core
                 count++;
             }
             catch (System.InvalidOperationException)
-            {}
+            {
+                MessageBox.Show("дубликат");
+            }
            
         }
         public void Clear()

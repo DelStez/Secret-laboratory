@@ -1,5 +1,5 @@
-﻿using AVLandRedBlackTrees.Core;
-using AVLandRedBlackTrees.Core.AVL;
+﻿using AVLandRedBlackBSTs.Core;
+using AVLandRedBlackTrees.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,22 +28,26 @@ namespace AVLandRedBlackTrees
         
         private void drawEdgeButton_Click(object sender, EventArgs e)
         {
-            //BST
+            ////BST
             var start = DateTime.Now;
-            bTree.Insert(Convert.ToInt32(textBox1.Text));
+            //bTree.Add(Convert.ToInt32(textBox1.Text));
             var spendtime = DateTime.Now - start;
-            label3.Text = "Время: " + spendtime.ToString();
+            //label3.Text = "Время: " + spendtime.ToString();
 
-            //AVL
+            ////AVL
             start = DateTime.Now;
             aTree.Add(Convert.ToInt32(textBox1.Text));
             spendtime = DateTime.Now - start;
+            TreeDraw avlTree = new TreeDraw(aTree);
+            pictureBox3.Image = avlTree.Draw();
             label23.Text = "Время: " + spendtime.ToString();
 
             //RBT
             start = DateTime.Now;
-            rTree.Insert(Convert.ToInt32(textBox1.Text));
+            rTree.Add(Convert.ToInt32(textBox1.Text));
             spendtime = DateTime.Now - start;
+            TreeDraw rbtDraw = new TreeDraw(rTree);
+            pictureBox2.Image = rbtDraw.Draw();
             label11.Text = "Время: " + spendtime.ToString();
         }
 
@@ -51,7 +55,7 @@ namespace AVLandRedBlackTrees
         {
             //BST
             var start = DateTime.Now;
-            bTree.Remove(Convert.ToInt32(textBox1.Text));
+            //bTree.(Convert.ToInt32(textBox1.Text));
             var spendtime = DateTime.Now - start;
             label16.Text = "Время: " + spendtime.ToString();
 
@@ -59,12 +63,16 @@ namespace AVLandRedBlackTrees
             start = DateTime.Now;
             aTree.Remove(Convert.ToInt32(textBox1.Text));
             spendtime = DateTime.Now - start;
+            TreeDraw avlTree = new TreeDraw(rTree);
+            pictureBox3.Image = avlTree.Draw();
             label10.Text = "Время: " + spendtime.ToString();
 
             //RBT
             start = DateTime.Now;
             rTree.Remove(Convert.ToInt32(textBox1.Text));
             spendtime = DateTime.Now - start;
+            TreeDraw rbtDraw = new TreeDraw(aTree);
+            pictureBox2.Image = rbtDraw.Draw();
             label14.Text = "Время: " + spendtime.ToString();
         }
 
@@ -82,9 +90,9 @@ namespace AVLandRedBlackTrees
         {
             //BST
             var start = DateTime.Now;
-            bTree.find(Convert.ToInt32(textBox1.Text));
+            //bTree.find(Convert.ToInt32(textBox1.Text));
             var spendtime = DateTime.Now - start;
-            label28.Text = "Время: " + spendtime.ToString();
+            //label28.Text = "Время: " + spendtime.ToString();
 
             //AVL
             start = DateTime.Now;
@@ -94,7 +102,7 @@ namespace AVLandRedBlackTrees
 
             //RBT
             start = DateTime.Now;
-            rTree.Find(Convert.ToInt32(textBox1.Text));
+            rTree.Contains(Convert.ToInt32(textBox1.Text));
             spendtime = DateTime.Now - start;
             label20.Text = "Время: " + spendtime.ToString();
         }
