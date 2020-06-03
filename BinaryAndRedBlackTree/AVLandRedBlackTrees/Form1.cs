@@ -30,9 +30,11 @@ namespace AVLandRedBlackTrees
         {
             ////BST
             var start = DateTime.Now;
-            //bTree.Add(Convert.ToInt32(textBox1.Text));
+            bTree.Insert(Convert.ToInt32(textBox1.Text));
             var spendtime = DateTime.Now - start;
-            //label3.Text = "Время: " + spendtime.ToString();
+            TreeDraw bstTree = new TreeDraw(bTree);
+            pictureBox1.Image = bstTree.Draw();
+            label3.Text = "Время: " + spendtime.ToString();
 
             ////AVL
             start = DateTime.Now;
@@ -55,8 +57,10 @@ namespace AVLandRedBlackTrees
         {
             //BST
             var start = DateTime.Now;
-            //bTree.(Convert.ToInt32(textBox1.Text));
+            bTree.Remove(Convert.ToInt32(textBox1.Text));
             var spendtime = DateTime.Now - start;
+            TreeDraw bstTree = new TreeDraw(bTree);
+            pictureBox1.Image = bstTree.Draw();
             label16.Text = "Время: " + spendtime.ToString();
 
             //AVL
@@ -90,9 +94,9 @@ namespace AVLandRedBlackTrees
         {
             //BST
             var start = DateTime.Now;
-            //bTree.find(Convert.ToInt32(textBox1.Text));
+            bTree.Find(Convert.ToInt32(textBox1.Text));
             var spendtime = DateTime.Now - start;
-            //label28.Text = "Время: " + spendtime.ToString();
+            label28.Text = "Время: " + spendtime.ToString();
 
             //AVL
             start = DateTime.Now;
