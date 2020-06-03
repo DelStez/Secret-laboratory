@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AVLandRedBlackTrees.Core
 {
-    public enum Colors { Red, Black }
+    //None используется для новых вершин
+    public enum NodeColor { None, Red, Black }
     public class RBT
     {
         public class RBTNode
@@ -14,314 +16,745 @@ namespace AVLandRedBlackTrees.Core
             public RBTNode left;
             public RBTNode right;
             public RBTNode parent;
-            public Colors colour;
-
-            public RBTNode(int key) { this.key = key; }
-            public RBTNode(Colors colour) { this.colour = colour; }
-            public RBTNode(int key, Colors colour) { this.key = key; this.colour = colour; }
+            public NodeColor colour;
         }
         
         public RBTNode root;
-        public RBT() { }
-        public RBTNode Find(int key)
+        public RBTNode NullBlackNode{ get; set; }
+       
+        // инициализация дерева
+        public RBT()
         {
-            bool isFound = false;
-            RBTNode temp = root;
-            RBTNode item = null;
-            while (!isFound)
+            root = null;
+        }
+        protected RBTNode createNode(int newKey)
+        {
+            //инициализация новой вершины
+            RBTNode newNode = new RBTNode { key = newKey, parent = null, left = null, right = null, colour = NodeColor.None };
+            return newNode;
+        }
+        protected void ResetNullBlack()
+        {
+            // сброс вершины 
+            NullBlackNode = new RBTNode { key = new int(), parent = null, left = null, right = null, colour = NodeColor.Black };
+        }
+        // создание корня дерева
+        protected void MakeRoot(RBTNode node)
+        {
+            if (node == null)
             {
-                if (temp == null)
-                    break;
+                root = null;
+            }
+            else
+            {
+                root = node;
+                node.parent = null;
+            }
+        }
+        protected void MakeLeftChild(RBTNode parent, RBTNode child)
+        {
+            parent.left = child;
+            if (child != null)
+            {
+                child.parent = parent;
+            }
+        }
+        protected void MakeRightChild(RBTNode parent, RBTNode child)
+        {
+            parent.right = child;
+            if (child != null)
+            {
+                child.parent = parent;
+            }
+        }
+
+        protected void ReplaceParentWithChild(RBTNode parent, RBTNode child)
+        {
+            
+
+            bool parentHasNoChildren = (parent.left == null && parent.right == null);// 
+            bool parentHasTwoChildren = (parent.left != null && parent.right!= null); // У родителя два ребёнка.
+            bool parentHasOneChild = (!parentHasNoChildren && !parentHasTwoChildren); // У родителя один ребёнок.
+
+            if (parentHasOneChild)
+            {
+                RBTNode grandparent = parent.parent;
+                if (grandparent == null)
+                {
+                    // родитель - это корень
+                    RemoveChildFromParent(child);
+                    MakeRoot(child);
+                }
                 else
                 {
-                    if (key < temp.key)
-                        temp = temp.left;
-                    else if (key > temp.key)
-                        temp = temp.right;
-                    else if (key == temp.key)
+                    bool parentIsLeftChildOfGrandParent = (grandparent.left == parent);
+                    bool parentIsRightChildOfGrandParent = (grandparent.right == parent);
+                    RemoveChildFromParent(parent);
+                    RemoveChildFromParent(child);
+                    if (parentIsLeftChildOfGrandParent)
                     {
-                        isFound = true;
-                        item = temp;
+                        MakeLeftChild(grandparent, child);
+                    }
+                    else if (parentIsRightChildOfGrandParent)
+                    {
+                        MakeRightChild(grandparent, child);
+                    }
+                    else
+                    {
+                        // у деда нет детей
+                        throw new System.ArgumentException();
                     }
                 }
             }
-            if (isFound)//если найден
-                return temp;
-            else // иначе
-                return null;
-        }
-        public void leftRotation(RBTNode x)
-        {
-            RBTNode y = x.right;
-
-            x.right = y.left;
-            if (y.left != null)
-                y.left.parent = x;
-            y.parent = x.parent;
-
-            if (x == root)
-                root = y;
-            else if (x == x.parent.left)
-                x.parent.left = y;
             else
-                x.parent.right = y;
-            y.left = x;
-            x.parent = y;
+            {
+                throw new System.ArgumentException();
+            }
         }
-        public void rightRotation(RBTNode x)
+        protected RBTNode FindSuccessor(RBTNode node)
         {
-            RBTNode y = x.left;
+            RBTNode successor;
 
-            x.left = y.right;
-            if (y.right != null)
-                y.right.parent = x;
-            y.parent = x.parent;
-
-            if (x == root)
-                root = y;
-            else if (x == x.parent.right)
-                x.parent.right = y;
+            if (node == null)
+            {
+                successor = null;
+            }
+            else if (node.left != null)
+            {
+                successor = FindSuccessor(node.left);
+            }
             else
-                x.parent.left = y;
-            y.right = x;
-            x.parent = y;
+            {
+                successor = node;
+            }
+
+            return successor;
         }
 
-        public void Insert(int item)
+        protected RBTNode Find(RBTNode node, int key)
         {
-            RBTNode newItem = new RBTNode(item);
+            bool nodeHasTargetValue = (node.key.CompareTo(key) == 0);
+            if (nodeHasTargetValue)
+            {
+                return node;
+            }
+
+            RBTNode matchingnode;
+
+            if (node.left != null)
+            {
+                matchingnode = Find(node.left, key);
+                if (matchingnode != null)
+                {
+                    return matchingnode;
+                }
+            }
+
+            if (node.right != null)
+            {
+                matchingnode = Find(node.right, key);
+                if (matchingnode != null)
+                {
+                    return matchingnode;
+                }
+            }
+
+            return null;
+        }
+
+        protected RBTNode Find(int key)
+        {
+            RBTNode node = Find(root, key);
+            return node;
+        }
+
+        #region Rotate
+        protected void RightRotate(RBTNode node)
+        {
+
+            RBTNode leftChild = node.left;
+            RBTNode leftChildRightChild = leftChild?.right; 
+            bool gotParent = (node.parent != null);
+            if (gotParent)
+            {
+                bool isNodeParentLeftChild = (node.parent.left == node);
+                bool isNodeParentRightChild = (node.parent.right == node);
+
+                if (isNodeParentLeftChild)
+                {
+                    MakeLeftChild(node.parent, leftChild);
+                }
+                else if (isNodeParentRightChild)
+                {
+                    MakeRightChild(node.parent, leftChild);
+                }
+            }
+            else
+            {
+                MakeRoot(leftChild);
+            }
+
+            node.parent = null;
+
+            MakeRightChild(leftChild, node);
+
+            MakeLeftChild(node, leftChildRightChild);
+        }
+
+        protected void LeftRotate(RBTNode node)
+        {
+
+            RBTNode rightChild = node.right;
+            RBTNode rightChildLeftChild = rightChild?.left;
+
+            bool gotParent = (node.parent != null);
+            if (gotParent)
+            {
+                bool isNodeParentLeftChild = (node.parent.left == node);
+                bool isNodeParentRightChild = (node.parent.right == node);
+
+                if (isNodeParentLeftChild)
+                {
+                    MakeLeftChild(node.parent, rightChild);
+                }
+                else if (isNodeParentRightChild)
+                {
+                    MakeRightChild(node.parent, rightChild);
+                }
+            }
+            else
+            {
+                MakeRoot(rightChild);
+            }
+
+            node.parent = null;
+            MakeLeftChild(rightChild, node);
+            MakeRightChild(node, rightChildLeftChild);
+        }
+
+        protected void LeftLeftTransform(RBTNode node)
+        {
+            RBTNode parent = node.parent;
+            RBTNode grandParent = node.parent.parent;
+            RightRotate(grandParent);
+            NodeColor swap = parent.colour;
+            parent.colour = grandParent.colour;
+            grandParent.colour = swap;
+        }
+
+        protected void LeftRightTransform(RBTNode node)
+        {
+            RBTNode parent = node.parent;
+            LeftRotate(parent);
+            LeftLeftTransform(parent);
+        }
+
+        protected void RightRightTransform(RBTNode node)
+        {
+            RBTNode parent = node.parent;
+            RBTNode grandParent = node.parent.parent;
+            LeftRotate(grandParent);
+            NodeColor swap = parent.colour;
+            parent.colour = grandParent.colour;
+            grandParent.colour = swap;
+        }
+
+        protected void RightLeftTransform(RBTNode node)
+        {
+            RBTNode parent = node.parent;
+            RightRotate(parent);
+            RightRightTransform(parent);
+        }
+        #endregion Rotate
+
+        #region Insert
+        protected void BalanceTreeAfterInsert(RBTNode newNode)
+        {
+            if (newNode.parent == null)
+            {
+                // Текущий узел N в корне дерева
+                newNode.colour = NodeColor.Black;
+                return;
+            }
+            if (newNode.parent != null && newNode.parent.colour == NodeColor.Black)
+            {
+                // Предок P текущего узла чёрный, то есть Свойство 4 (Оба потомка каждого красного узла — чёрные) не нарушается.
+                // Свойство 5 (Все пути от любого данного узла до листовых узлов содержат одинаковое число чёрных узлов) не нарушается.
+                return;
+            }
+
+            //Цвет null-узла считается черным
+
+            bool gotGrandParent = (newNode.parent != null && newNode.parent.parent != null);
+            if (gotGrandParent)
+            {
+                RBTNode parent = newNode.parent;
+                RBTNode grandParent = newNode.parent.parent;
+
+                // у текущего узла есть "дядя", котрый вызовет балансировку
+                bool isNodeLeftChild = (parent.left == newNode);
+                bool isNodeRightChild = (parent.right == newNode);
+
+                bool isParentLeftChild = (grandParent != null && grandParent.left == parent);
+                bool isParentRightChild = (grandParent != null && grandParent.right == parent);
+
+                RBTNode rightUncle = (isParentLeftChild && grandParent.right != null ? grandParent.right : null);
+                RBTNode leftUncle = (isParentRightChild && grandParent.left != null ? grandParent.left : null);
+
+                // дядя == null
+                RBTNode uncle = (isParentLeftChild ? rightUncle : leftUncle);
+
+                bool gotRedUncle = (uncle != null && uncle.colour == NodeColor.Red);
+                bool gotBlackUncle = (uncle == null || uncle.colour == NodeColor.Black);
+
+                if (gotRedUncle) // дядя - красный
+                {
+                    // две смежные вершины не могут быть красными => красный дядя имеет чёрного родителя
+
+                    // (i) Изменить цвет родителей и дяди на черный
+                    newNode.parent.colour = NodeColor.Black;
+                    uncle.colour = NodeColor.Black;
+
+                    // (ii) цвет прародителя  красный
+                    newNode.parent.parent.colour = NodeColor.Red;
+
+                    // (iii) балансировка дерева
+                    BalanceTreeAfterInsert(newNode.parent.parent);
+                }
+                else if (gotBlackUncle) //дядя - черный
+                {
+
+                    // (i)   текущий узел N — левый потомок P(родитель), и P — левый потомок G(предка).
+                    if (isParentLeftChild && isNodeLeftChild)
+                    {
+                        LeftLeftTransform(newNode);
+                    }
+
+                    // (ii)  текущий узел N — правый потомок P, а P в свою очередь — левый потомок своего предка G
+                    if (isParentLeftChild && isNodeRightChild)
+                    {
+                        LeftRightTransform(newNode);
+                    }
+
+                    // (iii) текущий узел N — правый потомок P, P в свою очередь  - правый потомок своего предка G
+                    if (isParentRightChild && isNodeRightChild)
+                    {
+                        RightRightTransform(newNode);
+                    }
+
+                    // (iv) текущий узел N — левый потомок P,P в свою очередь  - правый потомок своего предка G 
+                    if (isParentRightChild && isNodeLeftChild)
+                    {
+                        RightLeftTransform(newNode);
+                    }
+                }
+            }
+        }
+        protected void UnbalancedInsert(RBTNode node, RBTNode newNode)
+        {
+            if (newNode.key.CompareTo(node.key) < 0)
+            {
+                // ключ новой вершины < ключ уже существующей вершины
+                if (node.left == null)
+                    MakeLeftChild(node, newNode);
+                else
+                    UnbalancedInsert(node.left, newNode);
+            }
+            else if (newNode.key.CompareTo(node.key) > 0)
+            {
+                // ключ новой вершины > ключ уже существующей вершины
+                if (node.right == null)
+                {
+                    MakeRightChild(node, newNode);
+                }
+                else  
+                {
+                    UnbalancedInsert(node.right, newNode);
+                }
+            }
+            else if (newNode.key.CompareTo(node.key) == 0)
+            {
+                // ключ новой вершины  == ключ уже существующей вершины
+                // запрет на ввод дубликатов
+                throw new System.InvalidOperationException();
+            }
+        }
+        protected RBTNode UnbalancedInsert(int newValue)
+        {
+            RBTNode newNode = createNode(newValue);
+
+            if (root == null)
+                MakeRoot(newNode);
+            else
+                UnbalancedInsert(root, newNode);
+            return newNode;
+        }
+        protected void UnbalancedDelete(RBTNode node, out RBTNode nodeDeleted, out RBTNode nodeReplacedDeleted)
+        {
+            bool nodeHasNoChildren = (node.left == null && node.right == null);
+            bool nodeHasTwoChildren = (node.left != null && node.right != null);
+            bool nodeHasOneChild = (!nodeHasNoChildren && !nodeHasTwoChildren);
+
+            if (nodeHasNoChildren)
+            {
+                nodeDeleted = node;
+                if (nodeDeleted.colour == NodeColor.Black)
+                {
+                    bool nodeIsRoot = (node == root);
+                    bool nodeIsLeftChild = (!nodeIsRoot && node == node.parent.left);
+                    bool nodeIsRightChild = (!nodeIsRoot && node == node.parent.right);
+                    RBTNode parent = (node.parent ?? null);
+                    nodeIsLeftChild = (node == node.parent?.left);
+                    nodeIsRightChild = (node == node.parent?.right);
+
+                    RemoveChildFromParent(node);
+
+                    if (nodeIsLeftChild || nodeIsRightChild)
+                    {
+                        ResetNullBlack();
+                        nodeReplacedDeleted = NullBlackNode;
+
+                        if (nodeIsLeftChild)
+                        {
+                            MakeLeftChild(parent, NullBlackNode);
+                        }
+                        else if (nodeIsRightChild)
+                        {
+                            MakeRightChild(parent, NullBlackNode);
+                        }
+                    }
+                    else
+                    {
+                        // вершина является корнем
+                        nodeReplacedDeleted = null;
+                    }
+                }
+                else
+                {
+                    RemoveChildFromParent(node);
+                    nodeReplacedDeleted = null;
+                }
+            }
+            else if (nodeHasOneChild)
+            {
+                RBTNode child = (node.left ?? node.right); 
+                ReplaceParentWithChild(node, child);
+                nodeDeleted = node;
+                nodeReplacedDeleted = child;
+            }
+            else // if ( nodeHasTwoChildren )
+            {
+                RBTNode successor = FindSuccessor(node.right); // возвращает правого потомка
+
+                int swap = node.key;
+                node.key = successor.key;
+                successor.key = swap;
+                //двоичное дерево теперь сломанно, так как новый ключ вершины нарушает правила 
+                // однако в дальнейшем будет исправленно
+
+                nodeDeleted = successor;
+
+                bool successorHasNoChildren = (successor.left == null && successor.right == null);
+                bool successorHasRightChild = (successor.right != null);
+                if (successorHasRightChild)
+                {
+                    RBTNode rightChild = successor.right;
+                    ReplaceParentWithChild(successor, rightChild);
+
+                    if (nodeDeleted.colour == NodeColor.Black)
+                    {
+                        nodeReplacedDeleted = rightChild;
+                    }
+                    else
+                    {
+                        nodeReplacedDeleted = null;
+                    }
+                }
+                else if (successorHasNoChildren)
+                {
+                    if (nodeDeleted.colour == NodeColor.Black)
+                    {
+                        ResetNullBlack();
+                        MakeLeftChild(successor, NullBlackNode);
+                        ReplaceParentWithChild(successor, NullBlackNode);
+                        nodeReplacedDeleted = NullBlackNode;
+                    }
+                    else
+                    {
+                        RemoveChildFromParent(successor);
+                        nodeReplacedDeleted = null;
+                    }
+                }
+                else
+                {
+                    throw new System.InvalidOperationException();
+                }
+            }
+        }
+        #endregion Insert
+
+
+        protected int count { get; set; }
+        public int Count { get { return count; } }
+
+        protected bool isReadOnly { get; set; } 
+        public bool IsReadOnly { get { return isReadOnly; } }
+
+        public void Add(int item)
+        {
+            try
+            {
+                RBTNode newNode = UnbalancedInsert(item);
+                newNode.colour = NodeColor.Red;
+                BalanceTreeAfterInsert(newNode);
+                count++;
+            }
+            catch (System.InvalidOperationException)
+            {}
+           
+        }
+        public void Clear()
+        {
+            root = null;
+            count = 0;
+            isReadOnly = false;
+        }
+
+        public bool Contains(int item)
+        {
+            return (Find(item) != null);
+        }
+        # region Remove
+        /* При удалении вершины могут возникнуть три случая в зависимости от количества её детей:
+        *      Если у вершины нет детей, то изменяем указатель на неё у родителя на null
+        *      Если у неё только один ребёнок, то делаем у родителя ссылку на него вместо этой вершины.
+        *      Если же имеются оба ребёнка, то находим вершину со следующим значением ключа. 
+        * У такой вершины нет левого ребёнка (так как такая вершина находится в правом поддереве исходной вершины и она самая левая в нем, иначе бы мы взяли ее левого ребенка.
+        * Иными словами сначала мы переходим в правое поддерево, а после спускаемся вниз в левое до тех пор, пока у вершины есть левый ребенок). 
+        * Удаляем уже эту вершину описанным во втором пункте способом, скопировав её ключ в изначальную вершину.
+        */
+        public bool Remove(int item)
+        {
+            try
+            {
+                RBTNode node = Find(item);
+                if (node == null)
+                {
+                    return false;
+                }
+
+                RBTNode nodeDeleted, nodeReplacedDeleted;
+                UnbalancedDelete(node, out nodeDeleted, out nodeReplacedDeleted);
+
+                bool blackNodeDeleted = (nodeDeleted.colour == NodeColor.Black);
+                if (blackNodeDeleted)
+                {
+                    BalanceTreeAfterDelete(nodeReplacedDeleted);
+                }
+
+                count--;
+
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+            
+        }
+        /*Проверим балансировку дерева. Основные случаи:
+         *      Если брат этого ребёнка красный
+         *      Если брат текущей вершины был чёрным
+         *              Оба ребёнка у брата чёрные.
+         *              Если у брата правый ребёнок чёрный, а левый красный.
+         *              Если у брата правый ребёнок красный.*/
+        protected void BalanceTreeAfterDelete(RBTNode node)
+        {
             if (root == null)
             {
-                root = newItem;
-                root.colour = Colors.Black;
+                //корень был удален
                 return;
             }
-            RBTNode Y = null;
-            RBTNode X = root;
-            while (X != null)
-            {
-                Y = X;
-                if (newItem.key < X.key)
-                    X = X.left;
-                else
-                    X = X.right;
-            }
-            newItem.parent = Y;
-            if (Y == null)
-                root = newItem;
-            else if (newItem.key < Y.key)
-                Y.left = newItem;
-            else
-                Y.right = newItem;
 
-            newItem.left = null;
-            newItem.right = null;
-            newItem.colour = Colors.Red;
-            InsertFixUp(newItem);
-        }
-        public void InsertFixUp(RBTNode x)
-        {
-            //проверка свойств КБ-дерева
-            x.colour = Colors.Red;
-            while (x != root && x.parent.colour == Colors.Red)
+            bool leftChildOfRightSiblingIsBlack;
+            bool rightChildOfRightSiblingIsBlack;
+            bool leftChildOfLeftSiblingIsBlack;
+            bool rightChildOfLeftSiblingIsBlack;
+
+            while (node != root && node.colour == NodeColor.Black)
             {
-                if (x.parent == x.parent.parent.left)
+                //  узел - это не корневой черный узел, имеющий неявный  черный узел
+
+                bool isLeftChild = (node == node.parent.left);
+                if (isLeftChild)
                 {
-                    RBTNode y = x.parent.parent.right;
-                    if (y != null && y.colour == Colors.Red)
+                    // узел является левым потомком 
+
+                    RBTNode rightSibling = node.parent.right;
+
+                    if (rightSibling.colour == NodeColor.Red)
                     {
-                        x.parent.colour = Colors.Black;
-                        y.colour = Colors.Black;
-                        x.parent.parent.colour = Colors.Red;
-                        x = x.parent.parent;
+
+                        rightSibling.colour = NodeColor.Black;
+                        node.parent.colour = NodeColor.Red;
+                        LeftRotate(node.parent);
+                        rightSibling = node.parent.right;
+                    }
+
+                    leftChildOfRightSiblingIsBlack =
+                        (rightSibling.left == null || rightSibling.left.colour == NodeColor.Black);
+                    rightChildOfRightSiblingIsBlack =
+                        (rightSibling.right == null || rightSibling.right.colour == NodeColor.Black);
+
+                    if (leftChildOfRightSiblingIsBlack && rightChildOfRightSiblingIsBlack)
+                    {
+
+                        rightSibling.colour = NodeColor.Red;
+
+                        RBTNode parent = node.parent;
+                        if (node == NullBlackNode)
+                        {
+
+                            RemoveChildFromParent(node);
+                        }
+                        node = parent;
                     }
                     else
                     {
-                        if (x == x.parent.right)
+
+                        rightChildOfRightSiblingIsBlack =
+                            (rightSibling.right == null || rightSibling.right.colour == NodeColor.Black);
+
+                        if (rightChildOfRightSiblingIsBlack)
                         {
-                            x = x.parent;
-                            leftRotation(x);
+
+                            rightSibling.left.colour = NodeColor.Black;
+                            rightSibling.colour = NodeColor.Red;
+                            RightRotate(rightSibling);
+                            rightSibling = node.parent.right;
                         }
-                        x.parent.colour = Colors.Black;
-                        x.parent.parent.colour = Colors.Red;
-                        rightRotation(x.parent.parent);
+
+                        rightSibling.colour = node.parent.colour;
+                        node.parent.colour = NodeColor.Black;
+                        rightSibling.right.colour = NodeColor.Black;
+                        LeftRotate(node.parent);
+
+                        if (node == NullBlackNode)
+                        {
+
+                            RemoveChildFromParent(node);
+                        }
+                        node = root;
                     }
                 }
                 else
                 {
-                    RBTNode y = x.parent.parent.left;
-                    if (y != null && y.colour == Colors.Red)
+                    // узел является правым потомком 
+
+                    RBTNode leftSibling = node.parent.left;
+
+                    if (leftSibling.colour == NodeColor.Red)
                     {
-                        x.parent.colour = Colors.Black;
-                        y.colour = Colors.Black;
-                        x.parent.parent.colour = Colors.Red;
-                        x = x.parent.parent;
+
+                        leftSibling.colour = NodeColor.Black;
+                        node.parent.colour = NodeColor.Red;
+                        RightRotate(node.parent);
+                        leftSibling = node.parent.left;
+                    }
+
+                    leftChildOfLeftSiblingIsBlack =
+                        (leftSibling.left == null || leftSibling.left.colour == NodeColor.Black);
+                    rightChildOfLeftSiblingIsBlack =
+                        (leftSibling.right == null || leftSibling.right.colour == NodeColor.Black);
+
+                    if (leftChildOfLeftSiblingIsBlack && rightChildOfLeftSiblingIsBlack)
+                    {
+                        leftSibling.colour = NodeColor.Red;
+
+                        RBTNode parent = node.parent;
+                        if (node == NullBlackNode)
+                        {
+
+                            RemoveChildFromParent(node);
+                        }
+                        node = parent;
                     }
                     else
                     {
-                        if (x == x.parent.left)
+                        leftChildOfLeftSiblingIsBlack =
+                            (leftSibling.left == null || leftSibling.left.colour == NodeColor.Black);
+
+                        if (leftChildOfLeftSiblingIsBlack)
                         {
-                            x = x.parent;
-                            rightRotation(x);
+
+                            leftSibling.right.colour = NodeColor.Black;
+                            leftSibling.colour = NodeColor.Red;
+                            LeftRotate(leftSibling);
+                            leftSibling = node.parent.left;
                         }
-                        x.parent.colour = Colors.Black;
-                        x.parent.parent.colour = Colors.Red;
-                        leftRotation(x.parent.parent);
+
+                        leftSibling.colour = node.parent.colour;
+                        node.parent.colour = NodeColor.Black;
+                        leftSibling.left.colour = NodeColor.Black;
+                        RightRotate(node.parent);
+
+                        if (node == NullBlackNode)
+                        {
+                            RemoveChildFromParent(node);
+                        }
+                        node = root;
                     }
                 }
             }
-            root.colour = Colors.Black;
+
+            node.colour = NodeColor.Black;
         }
 
-        public void Remove(int key)
+        protected void RemoveChildFromParent(RBTNode child)
         {
-            RBTNode item = Find(key);
-            RBTNode X = null;
-            RBTNode Y = null;
+            RBTNode parent = child.parent;
 
-            if (item == null)
+            if (parent == null)
             {
-                // ничего не удаленно
-                return;
+                // если у вершины нет предка, то это корень дерева
+                MakeRoot(null);
             }
-            if (item.left == null || item.right == null)
+            else//иначе
             {
-                Y = item;
-            }
-            else
-            {
-                Y = TreeSuccessor(item);
-            }
-            if (Y.left != null)
-            {
-                X = Y.left;
-            }
-            else
-            {
-                X = Y.right;
-            }
-            if (X != null)
-            {
-                X.parent = Y;
-            }
-            if (Y.parent == null)
-            {
-                root = X;
-            }
-            else if (Y == Y.parent.left)
-            {
-                Y.parent.left = X;
-            }
-            else
-            {
-                Y.parent.left = X;
-            }
-            if (Y != item)
-            {
-                item.key = Y.key;
-            }
-            if (Y.colour == Colors.Black)
-            {
-                RemoveFixUp(X);
-            }
-
-        }
-        public void RemoveFixUp(RBTNode X)
-        {
-            while (X != null && X != root && X.colour == Colors.Black)
-            {
-                if (X == X.parent.left)
+                if (parent.left == child)// если данная вершина явлеятся левым листом
                 {
-                    RBTNode W = X.parent.right;
-                    if (W.colour == Colors.Red)
-                    {
-                        W.colour = Colors.Black;
-                        X.parent.colour = Colors.Red;
-                        leftRotation(X.parent);
-                        W = X.parent.right;
-                    }
-                    if (W.left.colour == Colors.Black && W.right.colour == Colors.Black)
-                    {
-                        W.colour = Colors.Red;
-                        X = X.parent;
-                    }
-                    else if (W.right.colour == Colors.Black)
-                    {
-                        W.left.colour = Colors.Black;
-                        W.colour = Colors.Red;
-                        rightRotation(W);
-                        W = X.parent.right;
-                    }
-                    W.colour = X.parent.colour;
-                    X.parent.colour = Colors.Black;
-                    W.right.colour = Colors.Black;
-                    leftRotation(X.parent);
-                    X = root;
+                    RemoveLeft(parent);
                 }
-                else
+                else if (parent.right == child)//если данная вершина явлеятся правым листом
                 {
-                    RBTNode W = X.parent.left;
-                    if (W.colour == Colors.Red)
-                    {
-                        W.colour = Colors.Black;
-                        X.parent.colour = Colors.Red;
-                        rightRotation(X.parent);
-                        W = X.parent.left;
-                    }
-                    if (W.right.colour == Colors.Black && W.left.colour == Colors.Black)
-                    {
-                        W.colour = Colors.Black;
-                        X = X.parent;
-                    }
-                    else if (W.left.colour == Colors.Black)
-                    {
-                        W.right.colour = Colors.Black;
-                        W.colour = Colors.Red;
-                        leftRotation(W);
-                        W = X.parent.left;
-                    }
-                    W.colour = X.parent.colour;
-                    X.parent.colour = Colors.Black;
-                    W.left.colour = Colors.Black;
-                    rightRotation(X.parent);
-                    X = root;
+                    RemoveRight(parent);
+                }
+                else// произошла ошибка ??
+                {
+                    throw new InvalidOperationException();
                 }
             }
-            if (X != null)
-                X.colour = Colors.Black;
         }
-        private RBTNode Maximum(RBTNode X)
+        protected void RemoveLeft(RBTNode parent)
         {
-            while(X.right.right != null)
-                X = X.right;
-
-            if (X.right.left != null)
-                X = X.right.left;
-            return X;
-        }
-        private RBTNode Minimum(RBTNode X)
-        {
-            while (X.left.left != null)
-                X = X.left;
-            
-            if (X.left.right != null)
-                X = X.left.right;
-            return X;
-        }
-        private RBTNode TreeSuccessor(RBTNode current)
-        {
-            if (current.left == null)
+            if (parent.left != null)
             {
-                RBTNode Y = current.parent;
-                while (Y != null && current == Y.right)
-                {
-                    current = Y;
-                    Y = Y.parent;
-                }
-                return Y;
+                RBTNode leftChild = parent.left;
+                parent.left = null;
+                leftChild.parent = null;
             }
-            else
-                return Minimum(current);
         }
+
+        protected void RemoveRight(RBTNode parent)
+        {
+            if (parent.right != null)
+            {
+                RBTNode rightChild = parent.right;
+                parent.right = null;
+                rightChild.parent = null;
+            }
+        }
+        #endregion Remove
+
     }
 }
