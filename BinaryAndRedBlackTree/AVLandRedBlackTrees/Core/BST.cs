@@ -9,148 +9,176 @@ namespace AVLandRedBlackBSTs.Core
     public class BST
     {
         public BSTNode root;
-        public int deepth;
+        public class BSTNode
+        {
+            public int key;
+            public BSTNode left;
+            public BSTNode right;
 
+            public BSTNode(int value)
+            {
+                this.key = value;
+            }
+        }
         public BST()
         {
             root = null;
-            deepth = 0;
         }
-
-        public BSTNode Root { get => root; set => root = value; }
-        public int Deepth
+        public BSTNode Find(int val)
         {
-            get => deepth;
-
-            set
+            BSTNode current = root;
+            while (current!= null)
             {
-                if (Deepth < value)
+                if (current.key == val)
+                    return current;
+                if (current.key > val)
+                    current= current.left;
+                else
+                    current= current.right;
+            }
+            return null;
+        }
+        public void Insert(int i)
+        {
+
+            if (root == null) root = new BSTNode(i);
+            else
+            {
+                BSTNode cur = root;
+                BSTNode pre = cur;
+                while (cur != null)
                 {
-                    this.deepth = value;
+                    pre = cur;
+                    if (cur.key < i)
+                    {
+                        cur = cur.right;
+                    }
+                    else
+                    {
+                        cur = cur.left;
+                    }
                 }
+
+                if (i < pre.key)
+                    pre.left = new BSTNode(i);
+                else if (i > pre.key)
+                    pre.right = new BSTNode(i);
+                else { }
             }
         }
-
-        private BSTNode SearchBSTNode(int keyValue)
+        public void Remove(int key)
         {
-            BSTNode currentBSTNode = this.Root;
+           BSTNode current = root;
+           BSTNode parent = root;
+            bool isLeftChild = false;
 
-            while (currentBSTNode != null && currentBSTNode.KeyValue != keyValue)
+            if (current == null)
             {
-                int key = currentBSTNode.KeyValue;
-                if (keyValue > key)
+                return;
+            }
+
+            // We exit the while loop when we have a node which equels the key we wish to delete,
+            // then delete that node:
+            while (current != null && current.key != key)
+            {
+                parent = current;
+
+                if (key < current.key)
                 {
-                    currentBSTNode = currentBSTNode.RightBSTNode;
+                    // move to left child:
+                    current = current.left;
+                    isLeftChild = true;
                 }
                 else
                 {
-                    currentBSTNode = currentBSTNode.LeftBSTNode;
+                    current = current.right;
+                    isLeftChild = false;
                 }
             }
 
-            return currentBSTNode;
-        }
-
-        private BSTNode CreateBSTNode(int keyValue)
-        {
-            BSTNode currentBSTNode = root;
-            BSTNode oldBSTNode = null;
-
-            while (currentBSTNode != null)
+            if (current == null)
             {
-                oldBSTNode = currentBSTNode;
-                if (keyValue < currentBSTNode.KeyValue)
+                return;
+            }
+
+            if (current.left == null && current.right == null)
+            {
+                if (current == root)
                 {
-                    currentBSTNode = currentBSTNode.LeftBSTNode;
+                    root = null;
                 }
                 else
                 {
-                    currentBSTNode = currentBSTNode.RightBSTNode;
+                    if (isLeftChild)
+                    {
+                        parent.left = null;
+                    }
+                    else
+                    {
+                        parent.right = null;
+                    }
+
                 }
             }
-            return AddBSTNode(keyValue, oldBSTNode);
-        }
-
-        private BSTNode AddBSTNode(int keyValue, BSTNode oldBSTNode)
-        {
-            BSTNode newBSTNode = new BSTNode(oldBSTNode, keyValue);
-            if (oldBSTNode == null)
+            else if (current.right == null)
             {
-                Root = newBSTNode;
-            }
-            else if (keyValue > oldBSTNode.KeyValue)
-            {
-                oldBSTNode.RightBSTNode = newBSTNode;
+                if (current == root)
+                    root = current.left;
+                else
+                {
+                    if (isLeftChild)
+                    {
+                        parent.left = current.left;
+                    }
+                    else
+                    {
+                        parent.right = current.right;
+                    }
+                }
             }
             else
             {
-                oldBSTNode.LeftBSTNode = newBSTNode;
-            }
-            Deepth = newBSTNode.Deepth;
-            return newBSTNode;
-        }
+               BSTNode successor = GetSuccessor(current);
 
-        private bool Exists(int keyValue, out BSTNode foundBSTNode)
-        {
-            foundBSTNode = SearchBSTNode(keyValue);
-            return foundBSTNode != null;
-        }
-
-        public bool Exists(int keyValue)
-        {
-            return Exists(keyValue, out BSTNode FoundBSTNode);
-        }
-
-        public BSTNode Add(int keyValue)
-        {
-            BSTNode newBSTNode;
-            if (Exists(keyValue, out newBSTNode) == false)
-            {
-                newBSTNode = CreateBSTNode(keyValue);
-            }
-            return newBSTNode;
-        }
-
-        public class BSTNode
-        {
-            public BSTNode parrent;
-            int X;
-            int Y;
-            public BSTNode leftBSTNode;
-            public BSTNode rightBSTNode;
-            public int key;
-            public readonly int deepth;
-
-            public BSTNode(BSTNode parrent, int keyValue)
-            {
-                this.parrent = parrent;
-                this.key = keyValue;
-
-                this.LeftBSTNode = null;
-                this.RightBSTNode = null;
-
-                if (this.Parrent == null)
+                if (current == root)
                 {
-                    this.deepth = 0;
+                    root = successor;
+                }
+                else if (isLeftChild)
+                {
+                    parent.left = successor;
                 }
                 else
                 {
-                    this.deepth = this.Parrent.Deepth + 1;
+                    parent.right = successor;
                 }
             }
+        }
+        private BSTNode GetSuccessor(BSTNode node)
+        {
+            BSTNode parentOfSuccessor = node;
+            BSTNode successor = node;
+            BSTNode current = node.right;
 
-            public BSTNode Parrent => parrent;
-            public int KeyValue => key;
-            public int Deepth => deepth;
-            public BSTNode LeftBSTNode { get => leftBSTNode; set => leftBSTNode = value; }
-            public BSTNode RightBSTNode { get => rightBSTNode; set => rightBSTNode = value; }
-
-            public bool IsRoot()
+            while (current != null)
             {
-                return this.Parrent == null;
+                parentOfSuccessor = successor;
+                successor = current;
+                current = current.left;
             }
 
+            if (successor != node.right)
+            {
+                parentOfSuccessor.left = successor.right;
+
+                successor.right = node.right;
+            }
+
+            successor.left = node.left;
+
+            return successor;
         }
+
     }
-   
+
 }
