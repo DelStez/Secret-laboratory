@@ -500,7 +500,7 @@ namespace AVLandRedBlackTrees.Core
         protected bool isReadOnly { get; set; } 
         public bool IsReadOnly { get { return isReadOnly; } }
 
-        public void Add(int item)
+        public string Add(int item)
         {
             try
             {
@@ -508,10 +508,11 @@ namespace AVLandRedBlackTrees.Core
                 newNode.colour = NodeColor.Red;
                 BalanceTreeAfterInsert(newNode);
                 count++;
+                return "";
             }
             catch (System.InvalidOperationException)
             {
-                MessageBox.Show("дубликат");
+                return "Дубликат не был добавлен: " + item.ToString();
             }
            
         }

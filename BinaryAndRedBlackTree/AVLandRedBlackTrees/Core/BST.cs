@@ -38,33 +38,39 @@ namespace AVLandRedBlackBSTs.Core
             }
             return null;
         }
-        public void Insert(int i)
+        public string Insert(int i)
         {
-
-            if (root == null) root = new BSTNode(i);
-            else
+            if (Find(i) == null)
             {
-                BSTNode cur = root;
-                BSTNode pre = cur;
-                while (cur != null)
+                if (root == null) root = new BSTNode(i);
+                else
                 {
-                    pre = cur;
-                    if (cur.key < i)
-                    {
-                        cur = cur.right;
-                    }
-                    else
-                    {
-                        cur = cur.left;
-                    }
-                }
 
-                if (i < pre.key)
-                    pre.left = new BSTNode(i);
-                else if (i > pre.key)
-                    pre.right = new BSTNode(i);
-                else { }
+                    BSTNode cur = root;
+                    BSTNode pre = cur;
+                    while (cur != null)
+                    {
+                        pre = cur;
+                        if (cur.key < i)
+                        {
+                            cur = cur.right;
+                        }
+                        else
+                        {
+                            cur = cur.left;
+                        }
+                    }
+
+                    if (i < pre.key)
+                        pre.left = new BSTNode(i);
+                    else if (i > pre.key)
+                        pre.right = new BSTNode(i);
+                }
+                return "";
             }
+            else
+                return "Дубликат не был добавлен: " + i.ToString();
+
         }
         public void Remove(int key)
         {
@@ -77,15 +83,13 @@ namespace AVLandRedBlackBSTs.Core
                 return;
             }
 
-            // We exit the while loop when we have a node which equels the key we wish to delete,
-            // then delete that node:
             while (current != null && current.key != key)
             {
                 parent = current;
 
                 if (key < current.key)
                 {
-                    // move to left child:
+
                     current = current.left;
                     isLeftChild = true;
                 }

@@ -30,6 +30,10 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label7 = new System.Windows.Forms.Label();
             this.getData = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -66,6 +70,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -87,17 +92,21 @@
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(169)))), ((int)(((byte)(175)))));
-            this.button1.Location = new System.Drawing.Point(171, 105);
+            this.button1.Location = new System.Drawing.Point(172, 245);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 20);
             this.button1.TabIndex = 2;
             this.button1.Text = "Поиск";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Search);
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.button3);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.getData);
             this.groupBox1.Controls.Add(this.button2);
@@ -112,10 +121,51 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройка дерева";
             // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(237)))), ((int)(((byte)(236)))));
+            this.textBox2.Location = new System.Drawing.Point(9, 53);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(157, 20);
+            this.textBox2.TabIndex = 24;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(169)))), ((int)(((byte)(175)))));
+            this.button3.Location = new System.Drawing.Point(171, 53);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 20);
+            this.button3.TabIndex = 23;
+            this.button3.Text = "Добавить";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.GetPlan);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 34);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(87, 13);
+            this.label4.TabIndex = 22;
+            this.label4.Text = "Загрузка плана";
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(10, 79);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(156, 108);
+            this.listBox1.TabIndex = 21;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 60);
+            this.label7.Location = new System.Drawing.Point(7, 200);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(147, 13);
             this.label7.TabIndex = 16;
@@ -129,13 +179,13 @@
             this.getData.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
             this.getData.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.getData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(169)))), ((int)(((byte)(175)))));
-            this.getData.Location = new System.Drawing.Point(9, 131);
+            this.getData.Location = new System.Drawing.Point(10, 271);
             this.getData.Name = "getData";
             this.getData.Size = new System.Drawing.Size(237, 20);
             this.getData.TabIndex = 5;
             this.getData.Text = "Очистить дерево";
             this.getData.UseVisualStyleBackColor = false;
-            this.getData.Click += new System.EventHandler(this.getData_Click);
+            this.getData.Click += new System.EventHandler(this.Clear_Click);
             // 
             // button2
             // 
@@ -145,18 +195,18 @@
             this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(169)))), ((int)(((byte)(175)))));
-            this.button2.Location = new System.Drawing.Point(90, 105);
+            this.button2.Location = new System.Drawing.Point(91, 245);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 20);
             this.button2.TabIndex = 9;
             this.button2.Text = "Удалить";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Remove);
             // 
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(237)))), ((int)(((byte)(236)))));
-            this.textBox1.Location = new System.Drawing.Point(9, 79);
+            this.textBox1.Location = new System.Drawing.Point(10, 219);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(237, 20);
             this.textBox1.TabIndex = 5;
@@ -169,13 +219,13 @@
             this.drawEdgeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
             this.drawEdgeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drawEdgeButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(169)))), ((int)(((byte)(175)))));
-            this.drawEdgeButton.Location = new System.Drawing.Point(9, 105);
+            this.drawEdgeButton.Location = new System.Drawing.Point(10, 245);
             this.drawEdgeButton.Name = "drawEdgeButton";
             this.drawEdgeButton.Size = new System.Drawing.Size(75, 20);
             this.drawEdgeButton.TabIndex = 2;
             this.drawEdgeButton.Text = "Добавить";
             this.drawEdgeButton.UseVisualStyleBackColor = false;
-            this.drawEdgeButton.Click += new System.EventHandler(this.drawEdgeButton_Click);
+            this.drawEdgeButton.Click += new System.EventHandler(this.Add);
             // 
             // tabControl1
             // 
@@ -210,6 +260,8 @@
             // 
             // listBox2
             // 
+            this.listBox2.CausesValidation = false;
+            this.listBox2.ForeColor = System.Drawing.SystemColors.WindowText;
             this.listBox2.FormattingEnabled = true;
             this.listBox2.Location = new System.Drawing.Point(345, 6);
             this.listBox2.Name = "listBox2";
@@ -285,7 +337,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(747, 540);
+            this.tabPage2.Size = new System.Drawing.Size(662, 395);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Удаление";
             // 
@@ -366,7 +418,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(747, 540);
+            this.tabPage3.Size = new System.Drawing.Size(662, 395);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Поиск";
             // 
@@ -440,7 +492,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(747, 540);
+            this.tabPage4.Size = new System.Drawing.Size(662, 395);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "BST";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -452,7 +504,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(741, 534);
+            this.pictureBox1.Size = new System.Drawing.Size(656, 389);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -463,7 +515,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(747, 540);
+            this.tabPage5.Size = new System.Drawing.Size(662, 395);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "RBT";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -475,7 +527,7 @@
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Location = new System.Drawing.Point(3, 3);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(741, 534);
+            this.pictureBox2.Size = new System.Drawing.Size(656, 389);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
@@ -486,7 +538,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(747, 540);
+            this.tabPage6.Size = new System.Drawing.Size(662, 395);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "AVL";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -498,10 +550,14 @@
             this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox3.Location = new System.Drawing.Point(3, 3);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(741, 534);
+            this.pictureBox3.Size = new System.Drawing.Size(656, 389);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox3.TabIndex = 2;
             this.pictureBox3.TabStop = false;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -513,6 +569,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.ShowInTaskbar = false;
             this.Text = "Trees";
@@ -555,7 +612,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.ListBox listBox2;
+        public System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.TabPage tabPage6;
@@ -574,6 +631,11 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

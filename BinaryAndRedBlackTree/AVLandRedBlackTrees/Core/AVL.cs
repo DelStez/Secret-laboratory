@@ -22,11 +22,12 @@ namespace AVLandRedBlackTrees.Core
         public AVL() { }
         public void Add(int key)
         {
-            AVLNode newItem = new AVLNode(key);
+                AVLNode newItem = new AVLNode(key);
             if (root == null)
                 root = newItem;
             else
                 root = RecursiveInsert(root, newItem);
+            
         }
         private AVLNode RecursiveInsert(AVLNode current, AVLNode n)
         {
@@ -136,17 +137,15 @@ namespace AVLandRedBlackTrees.Core
             }
             return current;
         }
-        public void Find(int data)
+        public string Find(int data)
         {
             if (Find(data, root) != null)
             {
-                //Элемент найден
-               // использовать листбоксы
+                return "Элемент найден";
             }
             else
             {
-                // использовать листбоксы
-                //Не был найден
+                return "Элемент не был найден";
             }
 
         }
