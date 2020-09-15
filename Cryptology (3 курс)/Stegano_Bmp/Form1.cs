@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,21 +17,60 @@ namespace Stegano_Bmp
         {
             InitializeComponent();
         }
-        public byte[,] rgbMatrixImage;
-        public string contentCont = string.Empty;
-        public string pathCont = string.Empty;
-        public string fileLoadContetnt = string.Empty;
-        public string fileLoadPath = string.Empty;
+        public Bitmap image;
+        public string message = string.Empty;
 
+        #region LoadFiles
         private void button1_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "bmp files (*.bmp)|*.bmp|png files (*.png)|*.png|All files (*.*)|*.*";
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Image files(*.png,*.jpg) | *.png; *.jpg";
+            fileDialog.InitialDirectory = @"C:\";
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                Image j = Image.FromFile(openFileDialog1.FileName.ToString());
-                LSB newImageMessage = new LSB(j);
+                image = (Bitmap)Image.FromFile(fileDialog.FileName.ToString());
+                textBox1.Text = fileDialog.FileName;
+                pictureBox1.Image = image;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Text files(*.txt) |*.txt";
+            fileDialog.InitialDirectory = @"C:\";
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader sr = new StreamReader(fileDialog.FileName))
+                    message = sr.ReadToEnd();
+                textBox2.Text = fileDialog.FileName;
+                textBox3.Text = message;
+            }
+        }
+        #endregion LoadFiles
+        public void encodeImage()
+        {
+            LSB newImageMessage = new LSB(image, message);
+            pictureBox1.Image = newImageMessage.insertTextToImage();
+
+        }
+        public void decodeImage()
+        {
+            LSB newImageMessage = new LSB(image);
+            textBox3.Text = newImageMessage.ExtractMessage();
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            encodeImage();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            decodeImage();
         }
     }
 }
