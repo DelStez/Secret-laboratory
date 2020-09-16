@@ -12,7 +12,5 @@ namespace MutatorProject
             this.fn = fn;
             this.text = text;
         }
-
-        
     }
 }

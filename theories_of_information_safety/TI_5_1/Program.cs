@@ -52,12 +52,16 @@ namespace TI_5_1
             { "k", 0.003 }, { "l", 0.028 }
         };
         public static Dictionary<string, double> FiveExpA = new Dictionary<string, double> {
-            { "a", 0.08 }, { "b", 0.02 }
+            { "a", 0.6 }, { "b", 0.3 },
+            { "c", 0.08 }, { "d", 0.02 }
         };
-        public static Dictionary<string, double> FiveExpB = new Dictionary<string, double> { 
-            { "aa", 0.0064 }, { "ab", 0.0016 },
-            { "ba", 0.0016 }, { "bb", 0.0004 }
+        public static Dictionary<string, double> FiveExpB = new Dictionary<string, double> {
+            { "aa", 0.36 }, { "ab", 0.18 }, { "ac", 0.048 }, { "ad", 0.012 },
+            { "ba", 0.18 }, { "bb", 0.09 }, { "bc", 0.024 }, { "bd", 0.006 },
+            { "cc", 0.0064 }, { "ca", 0.048 }, { "cb", 0.024 }, { "cd", 0.0016 },
+            { "dd", 0.0004 }, { "da", 0.012 }, { "db", 0.006 }, { "dc", 0.0016 },
         };
+
         public static Dictionary<string, double> FiveExpC = new Dictionary<string, double> {
             { "aaa", 0.000512 }, { "aab", 0.000128 },
             { "aba", 0.000128 }, { "abb", 0.000032 },

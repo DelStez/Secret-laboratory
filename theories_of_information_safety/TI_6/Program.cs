@@ -155,8 +155,19 @@ namespace TI_6
 
         }
     }
+
     class Program
     {
+        public static Dictionary<string, double> FiveExpA = new Dictionary<string, double> {
+            { "a", 0.6 }, { "b", 0.3 },
+            { "c", 0.08 }, { "d", 0.02 }
+        };
+        public static Dictionary<string, double> FiveExpB = new Dictionary<string, double> {
+            { "aa", 0.36 }, { "ab", 0.18 }, { "ac", 0.048 }, { "ad", 0.012 },
+            { "ba", 0.18 }, { "bb", 0.09 }, { "bc", 0.024 }, { "bd", 0.006 },
+            { "cc", 0.0064 }, { "ca", 0.048 }, { "cb", 0.024 }, { "cd", 0.0016 },
+            { "dd", 0.0004 }, { "da", 0.012 }, { "db", 0.006 }, { "dc", 0.0016 },
+        };
         public static Dictionary<string, double> alphaBetRUS = new Dictionary<string, double> {
             {" ", 0.175}, { "О", 0.09 },
             { "Е", 0.048 }, { "Ё", 0.024 },
@@ -216,10 +227,10 @@ namespace TI_6
         static void Main(string[] args)
         {
             Console.WriteLine("Задание № 1");
-            new Huffman(alphaBetENG1);
+            new Huffman(FiveExpA);
             Console.WriteLine("___________");
             Console.WriteLine("Задание № 2");
-            new Huffman(alphaBetENG);
+            new Huffman(FiveExpB);
             Console.WriteLine("___________");
             Console.WriteLine("Задание № 3");
             new Huffman(homeWork);

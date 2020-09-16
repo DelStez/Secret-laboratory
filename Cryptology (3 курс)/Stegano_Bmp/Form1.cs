@@ -58,8 +58,8 @@ namespace Stegano_Bmp
         }
         public void decodeImage()
         {
-            LSB newImageMessage = new LSB(image);
-            textBox3.Text = newImageMessage.ExtractMessage();
+            LSB newImageMessage = new LSB((Bitmap)pictureBox1.Image);
+            textBox3.Text = newImageMessage.ExtractMessage((Bitmap)pictureBox1.Image);
 
         }
 

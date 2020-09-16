@@ -27,7 +27,5 @@ namespace MutatorProject
 
             return base.VisitBlock(node);
         }
-
     }
-
 }

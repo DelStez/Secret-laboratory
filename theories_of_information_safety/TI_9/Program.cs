@@ -157,7 +157,6 @@ namespace TI_9
 
                     for (int j = 0; j < LineX.Length; j++)
                     {
-                        //Console.Write(LineX[j]);
                         LineX[j] = ' ';
                     }
                 }
@@ -204,7 +203,7 @@ namespace TI_9
             Console.Write($"д:"); BinaryMessage = "0110"; encrypt(BinaryMessage); ContrValues = "";
             Console.WriteLine(" ");
             Console.WriteLine($"Задание №5.2");
-            Console.Write($"а:"); BinaryMessage = "0010101"; encrypt(BinaryMessage); ContrValues = "";
+            Console.Write($"а:"); BinaryMessage = "1010101"; encrypt(BinaryMessage); ContrValues = "";
             Console.Write($"б:"); BinaryMessage = "0011110"; encrypt(BinaryMessage); ContrValues = "";
             Console.Write($"в:"); BinaryMessage = "0101010"; encrypt(BinaryMessage); ContrValues = "";
             Console.Write($"г:"); BinaryMessage = "1010100"; encrypt(BinaryMessage); ContrValues = "";
