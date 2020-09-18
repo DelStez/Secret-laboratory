@@ -174,22 +174,24 @@ namespace Stegano_Bmp
         }
         private int GetBitfromPixel(int currentPix)
         {
-            int temp = 0;
-            BitArray bitspixel = new BitArray(new int[] {currentPix});
-            return Convert.ToInt32(bitspixel[7]);
-
+            var array = Convert.ToString(currentPix, 2).Select(s => s.Equals('1')).ToList();
+            BitArray n = new BitArray(new int[] {currentPix});
+            return Convert.ToInt32(n[0]);
         }
 
-        // оператор "|" - логическое ИЛИ 
-        // на вход функции получаем значение бита и номер цвета пиксиля (R, G или B)
         private int SetPixel(bool currentBit, int pixel)
         {
             int newPixel;
+            var array = Convert.ToString(pixel, 2).Select(s => s.Equals('1')).ToList();
             if (currentBit)// если значение бита = 1
-                newPixel = pixel | 0x01; // 0x01 - 00000001 -> последние значение бита цвета, если равен нулю - изменится     
+                array[7] = true;
             else
-                newPixel = pixel | 0xFE; // 0xFE - 11111110 -> последние значение бита цвета, если неравен нулю - изменится
-            return newPixel;
+                array[7] = false;
+            array.Reverse();
+            int[] y = new int[1];
+            BitArray g = new BitArray(array.ToArray());
+            g.CopyTo(y,0);
+            return y[0];
         }
     }
 }
