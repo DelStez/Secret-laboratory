@@ -41,14 +41,14 @@ namespace Stegano_Bmp
             int pixelCount = 0, bitCount = 0; //счетчики битов сообщения и пикселей изображения
             bool getAllNeedPixel = false; // булевая переменная, необходимая для выхода из внешнего цикла
             //С помощью циклов проходим по изображению (по пикселям)
-            for (int i = 0; i < bmp.Height; i++)
+            for (int i = 0; i < bmp.Height-1; i++)
             {
                 if (getAllNeedPixel) break; //Если сообщение уже закодированно, то прекращаем проход по изображению
-                for (int j = 0; j < bmp.Width; j++)
+                for (int j = 0; j < bmp.Width-1; j++)
                 {
                     if (pixelCount != numberOfPixels)
                     {
-                        Color pixel = bmp.GetPixel(i, j); // получем текущий пиксель по координате
+                        Color pixel = bmp.GetPixel(j, i); // получем текущий пиксель по координате
                         //Далее в каждый цвет. код влаживаем бит сообщения
                         R = SetPixel(bits[bitCount], pixel.R);
                         bitCount++; // увеличиваем счетчик - получаем бит следующий сообщения
@@ -63,7 +63,7 @@ namespace Stegano_Bmp
                         }
                         else
                             B = pixel.B;
-                        bitmap.SetPixel(i,j, Color.FromArgb(R,G,B));
+                        bitmap.SetPixel(j,i, Color.FromArgb(pixel.A,R,G,B));
                         pixelCount++;
                     }
                     else
@@ -80,117 +80,55 @@ namespace Stegano_Bmp
             char newChar, oldChar = ' ';
             string result = string.Empty, buf;
             int bitCount = 0, bit;
-            List<int> messBits = new List<int>();
+            List<bool> messBits = new List<bool>();
             //int j = 0;
-            for (int i = 0; i < bmp.Height; i++)
+            for (int i = 0; i < bmp.Height - 1; i++)
             {
-                for (int j = 0; j < bmp.Width; j++)
+                for (int j = 0; j < bmp.Width - 1; j++)
                 {
                     Color pixel = bmp.GetPixel(j, i);
                     bit = GetBitfromPixel(pixel.R);
-                    messBits.Add(bit);
+                    messBits.Add(Convert.ToBoolean(bit));
                     bitCount++;
                     bit = GetBitfromPixel(pixel.G);
-                    messBits.Add(bit);
+                    messBits.Add(Convert.ToBoolean(bit));
                     bitCount++;
                     if (bitCount % 8 != 0)
                     {
                         bit = GetBitfromPixel(pixel.B);
-                        messBits.Add(bit);
+                        messBits.Add(Convert.ToBoolean(bit));
                         bitCount++;
                     }
-                    //temp = "";
-                    //buf = GetLetter(i, j);
-                    //result += buf;
-                    //temp = String.Concat(bufOld, buf);
-                    //bufOld = buf;
-                    //if (String.Compare(temp, "\\0") == 0) { return result; }
                 }
-                
-                //if (j - bmp.Width == 0)
-                //{
-                //    for (j = 1; j < bmp.Height; j += 3)
-                //    {
-                //        temp = "";
-                //        buf = GetLetter(i, j);
-                //        result += buf;
-                //        temp = String.Concat(bufOld, buf);
-                //        if (String.Compare(temp, "\\0") == 0) return result;
-
-                //    }
-                //}
-                //if (j - bmp.Width == 1)
-                //{
-                //    for (j = 2; j < bmp.Width; j += 3)
-                //    {
-                //        temp = "";
-                //        buf = GetLetter(i, j);
-                //        result += buf;
-                //        temp = String.Concat(bufOld, buf);
-                //        if (String.Compare(temp, "\\0") == 0) return result;
-
-                //    }
-                //}
             }
+            //messBits.Reverse();
             BitArray n = new BitArray(messBits.ToArray());
-            byte[] n2 = new byte[n.Length/8];
+            byte[] n2 = new byte[n.Length];
             n.CopyTo(n2, 0);
             result = Encoding.Default.GetString(n2);
             return result;
             
         }
-
-        private char GetLetter(int i, int j)
-        {
-            char letter;
-            int pixelCount = 0;
-            int[] bitArray = new int[8];
-            int count = 0;
-                for (int k = 0; k < 3; k++)
-                {
-                    Color pixel = bmp.GetPixel(i, j + k);
-                    bitArray[count] = GetBitfromPixel(pixel.R);
-                    count++;
-                    bitArray[count] = GetBitfromPixel(pixel.G);
-                    count++;
-                    if (k != 2)
-                    {
-                        bitArray[count] = GetBitfromPixel(pixel.B);
-                        count++;
-                    } 
-                }
-            
-            byte b = (byte)((bitArray[0] << 7)
-          | (bitArray[1] << 6)
-          | (bitArray[2] << 5)
-          | (bitArray[3] << 4)
-          | (bitArray[4] << 3)
-          | (bitArray[5] << 2)
-          | (bitArray[6] << 1)
-          | (bitArray[7] << 0));
-
-            letter = Convert.ToChar(b);
-            return letter;
-        }
         private int GetBitfromPixel(int currentPix)
         {
-            var array = Convert.ToString(currentPix, 2).Select(s => s.Equals('1')).ToList();
-            BitArray n = new BitArray(new int[] {currentPix});
+            
+           
+            BitArray n = new BitArray(new int[] { currentPix });
+            BitArray t = new BitArray(new int[] { 0xFE});
+            var array = n.Xor(t);
             return Convert.ToInt32(n[0]);
         }
 
         private int SetPixel(bool currentBit, int pixel)
         {
             int newPixel;
-            var array = Convert.ToString(pixel, 2).Select(s => s.Equals('1')).ToList();
+            BitArray n = new BitArray( new int[] {pixel} );
             if (currentBit)// если значение бита = 1
-                array[7] = true;
+                n[0] = true;
             else
-                array[7] = false;
-            array.Reverse();
+                n[0] = false;
             int[] y = new int[1];
-            BitArray g = new BitArray(array.ToArray());
-            g.CopyTo(y,0);
+            n.CopyTo(y,0);
             return y[0];
         }
     }
