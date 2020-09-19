@@ -1,39 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Collections;
-using System.IO.Ports;
-
 namespace Stegano_Bmp
 {
     public class LSB
     {
-        public Bitmap bmp;
-        public BitArray bits { get; set; }
-        public int numberOfSymbols;
-        public LSB(Bitmap image, string message)
+        public Bitmap bmp; // изображение
+        public BitArray bits { get; set; } // Битовый массив сообщения
+        public int numberOfSymbols;// кол-во сиволов
+        public LSB(Bitmap image, string message) //передача данных в текущий класс (режим кодирования)
         {
             this.bmp = new Bitmap(image);
             numberOfSymbols = message.Length;
-            GetBitsOfMessage(message);
+            GetBitsOfMessage(message);// получение битового массива сообщения
 
         }
-        public LSB(Bitmap image)
+        public LSB(Bitmap image)//передача данных в текущий класс (режим декодирования)
         {
             this.bmp = new Bitmap(image);
-
         }
-        public void GetBitsOfMessage(string message)
+        public void GetBitsOfMessage(string message) // получение битового массива сообщения
         {
-            byte[] temp = Encoding.Default.GetBytes(message);
-            bits = new BitArray(temp);
+            byte[] temp = Encoding.Default.GetBytes(message); //перевод в массив байтов
+            bits = new BitArray(temp); // перевод в массив битов
         }
-        public Bitmap insertTextToImage()
+        public Bitmap insertTextToImage() // LSB -кодировние
         {
             int R, G, B;
             Bitmap bitmap = (Bitmap)bmp.Clone();//Клонируем изображение
@@ -63,35 +56,35 @@ namespace Stegano_Bmp
                         }
                         else
                             B = pixel.B;
-                        bitmap.SetPixel(j,i, Color.FromArgb(pixel.A,R,G,B));
-                        pixelCount++;
+                        bitmap.SetPixel(j,i, Color.FromArgb(pixel.A,R,G,B)); // "перезапись" пикселя с новыми данными по каждому цвету
+                        pixelCount++;// увеличиваем счетчик пикселей
                     }
-                    else
+                    else // выход из цикла
                     {
                         getAllNeedPixel = true;
                         break;
                     }
                 }
             }
-            return bitmap;
+            return bitmap; // возвращаем результат
         }
-        public string ExtractMessage(Bitmap bmpCry)
+        public string ExtractMessage(Bitmap bmpCry) // Декодировка всего изображения
         {
             string result = string.Empty;
-            int bitCount = 0, bit;
-            List<bool> messBits = new List<bool>();
+            int bitCount = 0, bit; // счётчик и переменая для сохранение каждого бита отдельно (временная переменная)
+            List<bool> messBits = new List<bool>();//Список булевых значений, здесь будут храниться значения битов
             for (int i = 0; i < bmp.Height; i++)
             {
                 for (int j = 0; j < bmp.Width; j++)
                 {
-                    Color pixel = bmp.GetPixel(j, i);
-                    bit = GetBitfromPixel(pixel.R);
-                    messBits.Add(Convert.ToBoolean(bit));
+                    Color pixel = bmp.GetPixel(j, i);// получение пикселя
+                    bit = GetBitfromPixel(pixel.R);// вызов метода для получение последнего бита
+                    messBits.Add(Convert.ToBoolean(bit));//запоминаем бит
                     bitCount++;
                     bit = GetBitfromPixel(pixel.G);
                     messBits.Add(Convert.ToBoolean(bit));
                     bitCount++;
-                    if (bitCount % 8 != 0)
+                    if (bitCount % 8 != 0) // каждый "пустой" бит пропускается
                     {
                         bit = GetBitfromPixel(pixel.B);
                         messBits.Add(Convert.ToBoolean(bit));
@@ -99,29 +92,33 @@ namespace Stegano_Bmp
                     }
                 }
             }
-            BitArray n = new BitArray(messBits.ToArray());
-            byte[] n2 = new byte[n.Length];
-            n.CopyTo(n2, 0);
-            result = Encoding.Default.GetString(n2);
+            BitArray n = new BitArray(messBits.ToArray()); // булевый список в битовый массив
+            byte[] n2 = new byte[n.Length]; //массив байтов
+            n.CopyTo(n2, 0); //перевод в байты
+            result = Encoding.Default.GetString(n2);// байты в строку
             return result;
             
         }
         private int GetBitfromPixel(int currentPix)
         {
-            BitArray n = new BitArray(new int[] { currentPix });
-            BitArray t = new BitArray(new int[] { 0xFE});
-            var array = n.Xor(t);
+            BitArray n = new BitArray(new int[] { currentPix });// битовое представление пикселя
+            // так как битовый массив хранит биты в дргугом порядке в отличии от привычного порядка
+            // Пример  число 2 - 00010 (привычный порядок), в битовом массиве - реверс т.е. 01000
+            // последний бит - первый бит в массиве
             return Convert.ToInt32(n[0]);
         }
 
         private int SetPixel(bool currentBit, int pixel)
         {
-            BitArray n = new BitArray( new int[] {pixel} );
+            BitArray n = new BitArray( new int[] {pixel} ); // битовое представление пикселя
+            // так как битовый массив хранит биты в дргугом порядке в отличии от привычного порядка
+            // Пример  число 2 - 00010 (привычный порядок), в битовом массиве - реверс т.е. 01000
+            // последний бит - первый бит в массиве
             if (currentBit)// если значение бита = 1
                 n[0] = true;
             else
                 n[0] = false;
-            int[] y = new int[1];
+            int[] y = new int[1]; //получаем значение  пикселя в привычном виде (натурального числа)
             n.CopyTo(y,0);
             return y[0];
         }

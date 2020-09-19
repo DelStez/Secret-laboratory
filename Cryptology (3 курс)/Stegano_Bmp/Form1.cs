@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Stegano_Bmp
@@ -87,9 +81,7 @@ namespace Stegano_Bmp
                 save.Filter = "bitmap files(*.bmp) |*.bmp";
                 save.InitialDirectory = @"C:\";
                 if (save.ShowDialog() == DialogResult.OK)
-                {
                     pictureShow.Image.Save(save.FileName, ImageFormat.Bmp);// сохранение изображения
-                }
             }
         }
 
@@ -102,14 +94,10 @@ namespace Stegano_Bmp
                 save.Filter = "Text files(*.txt) |*.txt";
                 save.InitialDirectory = @"C:\";
                 if (save.ShowDialog() == DialogResult.OK)
-                {
                      File.WriteAllText(save.FileName, messageShow.Text);// запись результата в файл
-                }
             }
             else
-            {
                 MessageBox.Show("Нет изображения");
-            }
         }
         private bool Checking()//проверка файлов
         {

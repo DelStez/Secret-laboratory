@@ -71,6 +71,7 @@
             this.getImage.TabIndex = 9;
             this.getImage.Text = "...";
             this.getImage.UseVisualStyleBackColor = false;
+            this.getImage.Click += new System.EventHandler(this.GetImage_Click);
             // 
             // pathImage
             // 
