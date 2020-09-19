@@ -41,10 +41,10 @@ namespace Stegano_Bmp
             int pixelCount = 0, bitCount = 0; //счетчики битов сообщения и пикселей изображения
             bool getAllNeedPixel = false; // булевая переменная, необходимая для выхода из внешнего цикла
             //С помощью циклов проходим по изображению (по пикселям)
-            for (int i = 0; i < bmp.Height-1; i++)
+            for (int i = 0; i < bmp.Height; i++)
             {
                 if (getAllNeedPixel) break; //Если сообщение уже закодированно, то прекращаем проход по изображению
-                for (int j = 0; j < bmp.Width-1; j++)
+                for (int j = 0; j < bmp.Width; j++)
                 {
                     if (pixelCount != numberOfPixels)
                     {
@@ -77,14 +77,12 @@ namespace Stegano_Bmp
         }
         public string ExtractMessage(Bitmap bmpCry)
         {
-            char newChar, oldChar = ' ';
-            string result = string.Empty, buf;
+            string result = string.Empty;
             int bitCount = 0, bit;
             List<bool> messBits = new List<bool>();
-            //int j = 0;
-            for (int i = 0; i < bmp.Height - 1; i++)
+            for (int i = 0; i < bmp.Height; i++)
             {
-                for (int j = 0; j < bmp.Width - 1; j++)
+                for (int j = 0; j < bmp.Width; j++)
                 {
                     Color pixel = bmp.GetPixel(j, i);
                     bit = GetBitfromPixel(pixel.R);
@@ -101,7 +99,6 @@ namespace Stegano_Bmp
                     }
                 }
             }
-            //messBits.Reverse();
             BitArray n = new BitArray(messBits.ToArray());
             byte[] n2 = new byte[n.Length];
             n.CopyTo(n2, 0);
@@ -111,8 +108,6 @@ namespace Stegano_Bmp
         }
         private int GetBitfromPixel(int currentPix)
         {
-            
-           
             BitArray n = new BitArray(new int[] { currentPix });
             BitArray t = new BitArray(new int[] { 0xFE});
             var array = n.Xor(t);
@@ -121,7 +116,6 @@ namespace Stegano_Bmp
 
         private int SetPixel(bool currentBit, int pixel)
         {
-            int newPixel;
             BitArray n = new BitArray( new int[] {pixel} );
             if (currentBit)// если значение бита = 1
                 n[0] = true;

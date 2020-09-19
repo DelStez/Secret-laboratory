@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,9 @@ using System.Windows.Forms;
 
 namespace Stegano_Bmp
 {
-    public partial class Form1 : Form
+    public partial class mainWindow : Form
     {
-        public Form1()
+        public mainWindow()
         {
             InitializeComponent();
         }
@@ -21,56 +22,108 @@ namespace Stegano_Bmp
         public string message = string.Empty;
 
         #region LoadFiles
-        private void button1_Click(object sender, EventArgs e)
+        private void GetImage_Click(object sender, EventArgs e) //Загрузка изображения
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Image files(*.png,*.jpg) | *.png; *.jpg";
-            fileDialog.InitialDirectory = @"C:\";
+            OpenFileDialog fileDialog = new OpenFileDialog();// Диалог. окно - выбор файла
+            fileDialog.Filter = "Image files(*.jpg, *.bmp) | *.jpg; *.bmp";//Фильтр форматов
+            fileDialog.InitialDirectory = @"C:\"; // католог по умолчанию
 
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() == DialogResult.OK)// Если файл был выбран
             {
-                image = (Bitmap)Image.FromFile(fileDialog.FileName.ToString());
-                textBox1.Text = fileDialog.FileName;
-                pictureBox1.Image = image;
+                image = (Bitmap)Image.FromFile(fileDialog.FileName.ToString());// Загрузить изображение из файла
+                pathImage.Text = fileDialog.FileName;//показать путь файла
+                pictureShow.Image = image;// загрузка изображения
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void GetTXT_Click(object sender, EventArgs e)//Загрузка сообщения
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Text files(*.txt) |*.txt";
-            fileDialog.InitialDirectory = @"C:\";
+            OpenFileDialog fileDialog = new OpenFileDialog();// Диалог. окно - выбор файла
+            fileDialog.Filter = "Text files(*.txt) |*.txt"; //Фильтр форматов
+            fileDialog.InitialDirectory = @"C:\"; // католог по умолчанию
 
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() == DialogResult.OK) // Если файл был выбран
             {
-                using (StreamReader sr = new StreamReader(fileDialog.FileName))
-                    message = sr.ReadToEnd();
-                textBox2.Text = fileDialog.FileName;
-                textBox3.Text = message;
+                loadTXT(fileDialog.FileName);// вызов метода загрузки тхт файла
+                pathFile.Text = fileDialog.FileName;
             }
         }
+        private void loadTXT(string path)
+        {
+            using (StreamReader sr = new StreamReader(path)) //чтение из файла
+                message = sr.ReadToEnd();// записавыаем в переменную
+                messageShow.Text = message;// вывод содержимого
+        } 
         #endregion LoadFiles
-        public void encodeImage()
+        public void encodeImage() // метод кодирования 
         {
-            LSB newImageMessage = new LSB(image, message);
-            pictureBox1.Image = newImageMessage.insertTextToImage();
+            loadTXT(pathFile.Text);
+            CheckSize();//проверка размера сообщения
+            LSB newImageMessage = new LSB(image, message);// создания нового LSB - класса (содержит методы для кодировки LSB методом)
+            pictureShow.Image = newImageMessage.insertTextToImage();// полученный результат сохраняется в изображение
 
         }
         public void decodeImage()
         {
-            LSB newImageMessage = new LSB((Bitmap)pictureBox1.Image);
-            textBox3.Text = newImageMessage.ExtractMessage((Bitmap)pictureBox1.Image);
+            LSB newImageMessage = new LSB((Bitmap)pictureShow.Image);// оздания нового LSB - класса (содержит методы для декодировки LSB метода)
+            string temp = newImageMessage.ExtractMessage((Bitmap)pictureShow.Image);
+            messageShow.Text = temp.Replace("\0", "");// показать результат (немного отредактирован для читабельности)
 
         }
-
-        private void button3_Click(object sender, EventArgs e)
+        public void CheckSize()
         {
-            encodeImage();
+            if(image.Height*image.Width < message.Length * 3)
+            {
+                MessageBox.Show("Размер сообщения превышает допустимое кол-во символов. Часть сообщения будет утраченно!");
+                message = message.Substring(0, (image.Height * image.Width/3));// сокращение сообщения до подходящего размера
+            }
+        }
+        private void Coder_Click(object sender, EventArgs e)
+        {
+            if (Checking())
+            {
+                encodeImage();// метод кодировки
+                SaveFileDialog save = new SaveFileDialog();//диалог. окно -сохранение bmp файла
+                save.Filter = "bitmap files(*.bmp) |*.bmp";
+                save.InitialDirectory = @"C:\";
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                    pictureShow.Image.Save(save.FileName, ImageFormat.Bmp);// сохранение изображения
+                }
+            }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Decoder_Click(object sender, EventArgs e)
         {
-            decodeImage();
+            if (pictureShow.Image != null)
+            {
+                decodeImage();// метод декодировки изображения
+                SaveFileDialog save = new SaveFileDialog();// диалог. окно -сохранение тхт файла
+                save.Filter = "Text files(*.txt) |*.txt";
+                save.InitialDirectory = @"C:\";
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                     File.WriteAllText(save.FileName, messageShow.Text);// запись результата в файл
+                }
+            }
+            else
+            {
+                MessageBox.Show("Нет изображения");
+            }
+        }
+        private bool Checking()//проверка файлов
+        {
+            if (pictureShow.Image == null)
+            {
+                MessageBox.Show("Нет изображения");
+                return false;
+            }
+            else if (String.IsNullOrEmpty(pathFile.Text))
+            {
+                MessageBox.Show("Загрузите текст");
+                return false;
+            }
+            else return true;
         }
     }
 }
