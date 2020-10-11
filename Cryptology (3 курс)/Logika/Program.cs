@@ -546,8 +546,84 @@ namespace Logika
                     if (n3 == 0) isTrueTrue = false;
                 }
                 Console.WriteLine(isTrueTrue ? "Выражение тождественно-истинно" : "Выражение тождественно - ложно");
+        }
+        static void Func18(int[] a, int[] b)
+        {
+            Console.WriteLine("not (not A and A) or B and  (A and B or B)");
+            Console.WriteLine("A    | B     | (a or not b) -> b | (not a or b) | ((a or not b) -> b) and (not a or b)");
+            Console.WriteLine("---------------------------------------");
+            bool isTrueTrue = true;
+            for (int i = 0; i < a.Length; i++)
+            {
+                int n = Convert.ToInt32(!(Convert.ToBoolean(a[i]) || !Convert.ToBoolean(b[i])) || Convert.ToBoolean(b[i]));
+                int n2 = Convert.ToInt32((!Convert.ToBoolean(a[i])) || Convert.ToBoolean(b[i]));
+                int n3 = Convert.ToInt32((Convert.ToBoolean(n)) && Convert.ToBoolean(n2));
+                Console.WriteLine($"{a[i]}   " +
+                    $" | {b[i]}     " +
+                    $"| {n}         " +
+                    $"| {n2}        " +
+                    $"| {n3}");
+                if (n3 == 0) isTrueTrue = false;
             }
-            static void Main(string[] args)
+            Console.WriteLine(isTrueTrue ? "Выражение тождественно-истинно" : "");
+            Console.WriteLine();
+            Console.WriteLine("A    | B     | not ( A  and B )  | (not a or not b) | not ( A  and B ) <=> (not a or not b)");
+            Console.WriteLine("---------------------------------------");
+            isTrueTrue = true;
+            for (int i = 0; i < a.Length; i++)
+            {
+                int n = Convert.ToInt32(!(Convert.ToBoolean(a[i]) && Convert.ToBoolean(b[i])));
+                int n2 = Convert.ToInt32(!Convert.ToBoolean(a[i]) || !Convert.ToBoolean(b[i]));
+                int n3 = Convert.ToInt32((Convert.ToBoolean(n)) == Convert.ToBoolean(n2));
+                Console.WriteLine($"{a[i]}   " +
+                    $" | {b[i]}     " +
+                    $"| {n}         " +
+                    $"| {n2}        " +
+                    $"| {n3}");
+                if (n3 == 0) isTrueTrue = false;
+            }
+            Console.WriteLine(isTrueTrue ? "Выражение тождественно-истинно" : "Выражение тождественно - ложно");
+            Console.WriteLine();
+            int[] X = { 0, 0, 0, 0, 1, 1, 1, 1 };
+            int[] Y = { 0, 0, 1, 1, 0, 0, 1, 1 };
+            int[] Z = { 0, 1, 0, 1, 0, 1, 0, 1 };
+            Console.WriteLine("( not A ||  B )  | ( not B ||  C )  | not (( not A ||  B ) & ( not B ||  C )) || not A || c");
+            Console.WriteLine("---------------------------------------");
+            isTrueTrue = true;
+            for (int i = 0; i < X.Length; i++)
+            {
+                int n = Convert.ToInt32((!Convert.ToBoolean(X[i]) || Convert.ToBoolean(Y[i])));
+                int n2 = Convert.ToInt32(!Convert.ToBoolean(Y[i]) || Convert.ToBoolean(Z[i]));
+                int n3 = Convert.ToInt32(!(Convert.ToBoolean(n) && Convert.ToBoolean(n2)) || !Convert.ToBoolean(X[i]) || Convert.ToBoolean(Z[i]));
+                Console.WriteLine(
+                    $"| {n}         " +
+                    $"| {n2}        " +
+                    $"| {n3}");
+                if (n3 == 0) isTrueTrue = false;
+            }
+            Console.WriteLine(isTrueTrue ? "Выражение тождественно-истинно" : "Выражение тождественно - ложно");
+            int[] A = new int[] { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1 };
+            int[] B = new int[] { 0, 0, 0, 0,  0, 0, 0, 0,  1, 1, 1, 1,  1, 1, 1, 1,  0, 0, 0, 0,  0, 0, 0, 0,  1, 1, 1, 1,  1, 1, 1, 1 };
+            int[] C = new int[] { 0, 0, 0, 0,  1, 1, 1, 1,  0, 0, 0, 0,  1, 1, 1, 1,  0, 0, 0, 0,  1, 1, 1, 1,  0, 0, 0, 0,  1, 1, 1, 1 };
+            int[] D =     { 0, 0, 1, 1,  0, 0, 1, 1,  0, 0, 1, 1,  0, 0, 1, 1,  0, 0, 1, 1,  0, 0, 1, 1,  0, 0, 1, 1,  0, 0, 1, 1 };
+            int[] E =    { 0, 1, 0, 1,  0, 1, 0, 1,  0, 1, 0, 1,  0, 1, 0, 1,  0, 1, 0, 1,  0, 1, 0, 1,  0, 1, 0, 1,  0, 1, 0, 1 };
+            Console.WriteLine("A and B | C or not E or D  | A and B and (C or not E or D) and not B");
+            Console.WriteLine("---------------------------------------");
+            isTrueTrue = true;
+            for (int i = 0; i < A.Length; i++)
+            {
+                int n = Convert.ToInt32((Convert.ToBoolean(A[i]) && Convert.ToBoolean(B[i])));
+                int n2 = Convert.ToInt32(Convert.ToBoolean(C[i]) || !Convert.ToBoolean(E[i]) || Convert.ToBoolean(D[i]));
+                int n3 = Convert.ToInt32((Convert.ToBoolean(n) && Convert.ToBoolean(n2)) && !Convert.ToBoolean(B[i]));
+                Console.WriteLine(
+                    $"  {n}         " +
+                    $"| {n2}        " +
+                    $"| {n3}");
+                if (n3 == 0) isTrueTrue = false;
+            }
+            Console.WriteLine(isTrueTrue ? "Выражение тождественно-истинно" : "Выражение тождественно - ложно");
+        }
+        static void Main(string[] args)
             {
                 int[] bA = { 0, 0, 1, 1 };
                 int[] bB = { 0, 1, 0, 1 };
@@ -569,6 +645,7 @@ namespace Logika
                 Func16();
                 Console.WriteLine("№17\n");
                 Func17(bA, bB);
+                Func18(bA, bB);
                 Console.Read();
             }
     }

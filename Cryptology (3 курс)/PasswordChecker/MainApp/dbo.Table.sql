@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Table]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [LoginUser] VARCHAR(50) NOT NULL, 
+    [HashPass] UNIQUEIDENTIFIER NOT NULL
+)
