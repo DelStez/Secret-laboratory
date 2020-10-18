@@ -86,7 +86,6 @@
             this.button2.TabIndex = 6;
             this.button2.Text = "Регистрация";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // PasswordAuthentication
             // 
@@ -103,6 +102,8 @@
             this.MaximizeBox = false;
             this.Name = "PasswordAuthentication";
             this.Text = " Password Authentication";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PasswordAuthentication_FormClosing);
+            this.Load += new System.EventHandler(this.PasswordAuthentication_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

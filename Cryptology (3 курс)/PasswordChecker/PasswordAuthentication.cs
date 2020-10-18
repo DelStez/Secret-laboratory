@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.OleDb; // отвечает за работу с БД (соединение, запросы)
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;// содержит алгоритмы шифрования и хэширования
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace PasswordChecker
 {
     public partial class PasswordAuthentication : Form
     {
+        public static string connectString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=data.mdb;";
+        private OleDbConnection dBConnect;
         public PasswordAuthentication()
         {
             InitializeComponent();
+            dBConnect = new OleDbConnection(connectString);
         }
 
         public static string HashPassword(string password)
@@ -72,7 +75,17 @@ namespace PasswordChecker
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            
+        }
 
+        private void PasswordAuthentication_Load(object sender, EventArgs e)
+        {
+            dBConnect.Open();
+        }
+
+        private void PasswordAuthentication_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            dBConnect.Close();
         }
     }
 }
