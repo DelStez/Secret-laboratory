@@ -20,8 +20,12 @@ namespace RLE
             compress = RLUcomp(compress);
             Console.WriteLine("Обратное: \n" +compress);
             Console.WriteLine("Задание №2");
-            message = "FFFFFFFFKKKKKSSSSUURERRRRRRRRRPPPPPPPPDDDDKKKKKKGLDDDDDDDDKKKKKKKKGGGGMGMMMM";
+            
+            message = "небесанебонебесныйтихоходнебесносинийпароход";
+            int g = message.Length;
             compress = RLComp(message);
+            compress = compress.Replace("(", "").Replace(")", "");
+            g = compress.Length;
             Console.WriteLine("Сжатие: \n" + compress);
             compress = RLUcomp(compress);
             Console.WriteLine("Обратное: \n" + compress);
