@@ -38,14 +38,12 @@ namespace GOST34
             long a = -3;
             long b = 1000;
             long n = 32089;
-            string message = "";
+            string message = "This is message, length=32 bytes";
+            byte[] h = new byte[32];
+            byte[] bytes = Encoding.ASCII.GetBytes(message);
+            GetHout(h, bytes);
             Random random = new Random();
             long k = random.Next(1, (int)n-1);
-        }
-        public void GetHash()
-        {
-            int L = 0;
-            
         }
         //Функция сжатия внутренних итераций (по ГОСТ “шаговая функция хэширования”) 
 
@@ -142,7 +140,7 @@ namespace GOST34
         #endregion GenKey
         //Шифрующего преобразования;
         #region cipherChanges
-        public static byte[] CipherChange(byte[] h, byte[] key, byte[] m)
+        public static byte[] CipherChange(byte[] h, byte[] m)
         {
             BitArray bitArray = new BitArray(h);
             bool[] n1 = new bool[256];
@@ -152,11 +150,12 @@ namespace GOST34
             for (int i = 0, k = 0; i < 256; i += 64, k += 1)
             {
                 byte[] temp = new byte[8];
-                n1.Skip(i).Take(64).ToArray().CopyTo(temp, 0);
+                var t = n1.Skip(i).Take(64).ToArray();
+                new BitArray(t).CopyTo(temp, 0);
                 new BitArray(Feistel(temp, keys[k])).CopyTo(n2, i);
             }
             byte[] result = new byte[32];
-            n2.Reverse().ToArray().CopyTo(result, 0);
+            new BitArray(n2.Reverse().ToArray()).CopyTo(result, 0);
             return result;
         }
 
@@ -200,7 +199,7 @@ namespace GOST34
         public static byte[] Feistel(byte[] data, byte[] key) // Фейстель
         {
             BitArray n = new BitArray(data);
-            bool[] n1 = new bool[64];
+            bool[] n1 = new bool[256];
             n.CopyTo(n1,0);
             BitArray A = new BitArray(n1.ToList().Take(32).ToArray());
             BitArray B = new BitArray(n1.ToList().Skip(32).Take(32).ToArray());
@@ -265,11 +264,55 @@ namespace GOST34
         }
         #endregion cipherChanges
         // Перемешивающего преобразования
-        public static BitArray
+
         #region Hash
-        public void Changes()
+        public static BitArray PsiFunc(BitArray current)
         {
-            
+            bool[] getArray = new bool[256];
+            current.CopyTo(getArray, 0);
+            List<bool[]> temp = new List<bool[]>();
+            for (int i = 0; i < 256; i += 16)
+            {
+                temp.Add(getArray.Skip(i).Take(16).ToArray());
+            }
+            bool[] result = new bool[256];
+            var t = new BitArray(temp[0]).Xor(new BitArray(temp[1]))
+                                         .Xor(new BitArray(temp[2]))
+                                         .Xor(new BitArray(temp[3]))
+                                         .Xor(new BitArray(temp[12]))
+                                         .Xor(new BitArray(temp[15]));
+            t.CopyTo(result, 0);
+            for (int i = 0, k = 16; k < 256; i++, k += 16)
+            {
+                temp[15 - i].CopyTo(result, k);
+            }
+            return new BitArray(result);
+        }
+        public static void GetHout(byte[] h, byte[] m)
+        {
+            BitArray S = new BitArray(CipherChange(h, m));
+            BitArray Mblock = new BitArray(m);
+            BitArray Hin = new BitArray(h);
+            for (int i = 0; i < 12; i++)
+                S = PsiFunc(S);
+            var t = PsiFunc(S.Xor(Mblock));
+            var r = t.Xor(Hin);
+            for (int i = 0; i < 61; i++)
+                r = PsiFunc(r);
+            StringBuilder sb = new StringBuilder(r.Length / 4);
+
+            for (int i = 0; i < r.Length; i += 4)
+            {
+                int v = (r[i] ? 8 : 0) |
+                        (r[i + 1] ? 4 : 0) |
+                        (r[i + 2] ? 2 : 0) |
+                        (r[i + 3] ? 1 : 0);
+
+                sb.Append(v.ToString("x1")); // Or "X1"
+            }
+
+            String result = sb.ToString();
+            Console.WriteLine(result);
         }
         #endregion Hash
 
