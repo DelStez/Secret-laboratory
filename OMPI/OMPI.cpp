@@ -13,7 +13,7 @@ int main()
 	double sum = 0.0;
 	int a;
 	double t = omp_get_wtime();
-	#pragma omp parallel for reduction(+: sum) num_threads(1)
+	#pragma omp parallel for reduction(+: sum) num_threads(4)
 	for (int k = 0; k < N; ++k) 
 	{
 		sum += 1.0 / pow(16.0, k) * (

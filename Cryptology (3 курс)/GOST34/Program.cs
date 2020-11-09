@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace GOST34
 {
@@ -41,9 +41,28 @@ namespace GOST34
             string message = "This is message, length=32 bytes";
             byte[] h = new byte[32];
             byte[] bytes = Encoding.ASCII.GetBytes(message);
+            Console.WriteLine(ByteArrayToString(bytes));
+            //bytes = Check(bytes);
             GetHout(h, bytes);
             Random random = new Random();
             long k = random.Next(1, (int)n-1);
+            Console.Read();
+
+        }
+        public static string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
+        }
+        public static byte[] Check(byte[] m)
+        {
+            List<byte> n = m.ToList();
+            while (n.Count % 32 != 0)
+                n.Add(0);
+            byte[] result = n.ToArray();
+            return result;
         }
         //Функция сжатия внутренних итераций (по ГОСТ “шаговая функция хэширования”) 
 
@@ -51,23 +70,25 @@ namespace GOST34
         #region GenKey
         public static List<byte[]> GenerateKeys(byte[] m, byte[] h)
         {
-            BitArray U = new BitArray(m);
-            BitArray V = new BitArray(h);
-            BitArray W = U.Xor(V);
+            byte[] U = h;
+            byte[] V = m;
+            var p = new BitArray(U).Xor(new BitArray(V));
+            byte[] W = new byte[32];
+            p.CopyTo(W,0);
             List<byte[]> Keys = new List<byte[]>();
             byte[] t = new byte[32];
             W.CopyTo(t, 0);
-            Keys.Add(P(t));
+            Keys.Add(P(W.Reverse().ToArray()));
             for (int j = 2; j <= 4; j++)
             {
                     
-                    U.CopyTo(t, 0);
-                    U = new BitArray(A(t)).Xor(j == 3 ? ConvertHexToBitArray(c3) : new BitArray(c24));
-                    V.CopyTo(t, 0);
-                    V = new BitArray(A(A(t)));
-                    W = U.Xor(V);
-                    W.CopyTo(t,0);
-                    Keys.Add(P(t));
+                    p = new BitArray(A(U.Reverse().ToArray())).Xor(j == 3 ? ConvertHexToBitArray(c3) : new BitArray(c24));
+                    p.CopyTo(U, 0);
+                    p = new BitArray(A(A(V.Reverse().ToArray()).Reverse().ToArray()));
+                    p.CopyTo(V, 0);
+                    p = new BitArray(U).Xor(new BitArray(V));
+                    p.CopyTo(W,0);
+                    Keys.Add(P(W.Reverse().ToArray()));
             }
             return Keys;
         }
@@ -106,22 +127,25 @@ namespace GOST34
 
         public static byte[] P(byte[] currentMblock)
         {
-            BitArray getBits = new BitArray(currentMblock);
-            bool[] n1 = new bool[256];
-            getBits.CopyTo(n1, 0);
-            List<bool> n2 = new List<bool>(n1);
-            List<BitArray> n = new List<BitArray>();
-            for (int i = 0; i < 256; i+=8)
+            byte[] n = new byte[32];
+            int k = 0, j = 0;
+            int index = 31, maxk = 31;
+            while(index !=-1)
             {
-                n.Add(new BitArray(n2.Skip(i).Take(8).ToArray()));
+               
+                n[maxk - k] = currentMblock[index];
+                k += 4;
+                index--;
+                j++;
+                if (k == 32)
+                {
+                    j = 0;
+                    maxk--;
+                    k = 0;
+                }
+
             }
-            for (int i=32, k =0; i <= 1; i--, k+=8)
-            {
-                n[Eyler(i)-1].CopyTo(n1, k);
-            }
-            byte[] P = new byte[32];
-            new BitArray(n1).CopyTo(P, 0);
-            return P;
+            return n;
         }
         //функция Эйлера
         static int Eyler(int n)
@@ -290,6 +314,7 @@ namespace GOST34
         }
         public static void GetHout(byte[] h, byte[] m)
         {
+
             BitArray S = new BitArray(CipherChange(h, m));
             BitArray Mblock = new BitArray(m);
             BitArray Hin = new BitArray(h);
@@ -299,20 +324,9 @@ namespace GOST34
             var r = t.Xor(Hin);
             for (int i = 0; i < 61; i++)
                 r = PsiFunc(r);
-            StringBuilder sb = new StringBuilder(r.Length / 4);
-
-            for (int i = 0; i < r.Length; i += 4)
-            {
-                int v = (r[i] ? 8 : 0) |
-                        (r[i + 1] ? 4 : 0) |
-                        (r[i + 2] ? 2 : 0) |
-                        (r[i + 3] ? 1 : 0);
-
-                sb.Append(v.ToString("x1")); // Or "X1"
-            }
-
-            String result = sb.ToString();
-            Console.WriteLine(result);
+            byte[] hout = new byte[32];
+            r.CopyTo(hout, 0);
+            Console.WriteLine(ByteArrayToString(hout));
         }
         #endregion Hash
 
