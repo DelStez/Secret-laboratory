@@ -28,7 +28,7 @@ namespace ECDSA
                 : "Подпись не верна";
             Console.WriteLine(verification);
 
-            message = "The quick brown fox jumps over the lazy dog";
+            message = "The quick brown fox jumps over the lazy cog";
             Console.WriteLine();
             Console.WriteLine($"Сообщение: {message}");
             verification = ellipticCurveDsa.VerifySignature(keyPair.publicKey, message, signature)

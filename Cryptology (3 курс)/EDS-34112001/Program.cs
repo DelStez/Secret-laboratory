@@ -36,7 +36,7 @@ namespace EDS_34112001
             VerificationKey.Q.y = BigInteger.Parse("17614944419213781543809391949654080031942662045363639260709847859438286763994");
             VerificationKey.Q.isZero = false;
 
-            bool showHelp = false;
+
             EDS.CreateSignature("C://Users//Kanda//Desktop//fjhg.txt", Signature, SignatureKey);
             Console.WriteLine("Подпись успешно создана!");
             if (EDS.CheckSignature("C://Users//Kanda//Desktop//fjhg.txt", Signature, VerificationKey))
