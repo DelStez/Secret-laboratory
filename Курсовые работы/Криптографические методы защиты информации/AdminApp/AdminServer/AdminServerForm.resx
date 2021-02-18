@@ -117,72 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="TrayMode.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="TrayModeMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="TrayModeMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>124, 17</value>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>670, 17</value>
+  </metadata>
+  <metadata name="IDuser.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="IP.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="DC.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GetInfo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="TrayMode.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAEAICAAAAEAGACoDAAAFgAAACgAAAAgAAAAQAAAAAEAGAAAAAAAqAwAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////
-        //////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAD///////8mrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt////////8AAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////8mrt8m
-        rt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8AAAAAAAAAAAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8AAAAA
-        AAAAAAAmrt8mrt8mrt////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAmrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt8AAAAAAAAmrt8mrt8mrt8mrt8mrt8mrt////8AAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAAAmrt8mrt8mrt8mrt8mrt8mrt8mrt8A
-        AAAAAAAAAAAmrt8mrt8mrt8mrt8mrt8mrt8mrt8mrt////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAD///8AAAAAAAAAAAAmrt8mrt8mrt8mrt8mrt8mrt8AAAAAAAAkoc4mrt8mrd8mrN8mq98mq98mqt8m
-        qd8mqN8mqN8mp99WVlYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAAAAAAAmrt8mrd8mrN8m
-        q98mq98AAAAAAAAmqN8mqN8mp98mpt8mpd8mpd8mpN8mo98mot8mot8mod8moN////8AAAAAAAAAAAAA
-        AAAAAAAAAAAAAAD///8mqt8PQ1gAAAAAAAAmp98mpt8mpd8CBggAAAAAAAAmot8mot8mod8moN8mn98m
-        n98mnt8mnd8mnN8mnN8mm98mmt8mmd8AAAD///8AAAAAAAAAAAAAAAAAAAAAAAD///8mo98mot8AAAAA
-        AAAmoN8mn98DCg4AAAAAAAAmnN8mnN8mm98mmt8mmd8mmd8mmN8ml98mlt8mlt8mld8mlN8mk98mk98m
-        kt8AAAAAAAAAAAAAAAAAAAAAAAD///8mnd8mnN8mnN8AAAAAAAAmmd8CBQcAAAAAAAAmlt8mlt8mld8m
-        lN8mk98mk98mkt8mkd8mkN8mkN8mj98mjt8mjt8mjd8mjN8mi98mi9////8AAAAAAAAAAAAAAAD///8m
-        lt8mlt8mld8AAAAAAAAAAAAAAAAAAAAIHSwmkN8mj98mjt8mjt8mjd8mjN8mi98mi98mit8mid8miN8m
-        iN8mh98mht8mhd8mhd8mhN////8AAAAAAAAAAAAAAAD///8mkN8mj98AAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAmiN8miN8mh98mht8mhd8mhd8mhN8mg98mgt8mgt8mgd8mgN8mf98mf98mft8mfd////8AAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMzMz///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAmf98mf98mft8m
-        fd8mfN8mfN8me98met8med8med8meN8md98mdt////8AAAAAAAAAAAAAAAD///8AAAD/////////////
-        //8AAAAAAAAAAAAAAAAAAAD///////////8AAAAAAAAmd98mdt8mdt8mdd8mdN8mc98mc98mct8mcd8m
-        cd8hYb8AAAAAAAAAAAAAAAAAAAD///8AAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAD/////
-        //////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8m
-        dd8AAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////8AAAAAAAAAAAAAAAAmcd8m
-        cd8mcd8mcd8mcd8mcd8mcd////8AAAAAAAAAAAAAAAD///8mcd8mcd8AAAD///8AAAAAAAAAAAAAAAAA
-        AAAAAAAAAAD///////////8AAAAAAAAmcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd////8AAAAA
-        AAAAAAAAAAAAAAD///8mcd8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAAAAAAAmcd8m
-        cd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd////8AAAAAAAAAAAAAAAAAAAAAAAD///8mcd8mcd8AAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8m
-        cd////8AAAAAAAAAAAAAAAAAAAAAAAAAAAD///8mcd8mcd8mcd8AAAAAAAAAAAAAAAAAAAAmcd8mcd8m
-        cd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAD///8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8m
-        cd8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8mcd8mcd8mcd8mcd8mcd8m
-        cd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8CBAcAAAAAAAAAAAAAAAD///8AAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAD///8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8Q
-        L1sAAAAAAAAAAAAmcd8mcd////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/
-        //8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8mcd8katAAAAAAAAAAAAAmcd8mcd8mcd////8AAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADd3d3///8mcd8mcd8mcd8mcd8bUZ8A
-        AAAAAAAAAAAAAAAmcd8mcd8mcd////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmcd8mcd8mcd////////8AAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAKCgr///////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAD///////////7wD//8wAAf/AAA5/wAAHv8AAA/+AAAFfAAAA3wAAAH4AAAA+AA
-        AAfAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA+AAAAfgAAAH8AAAD/AAAAH4AAAf3AAAP8YA
-        AH/gAAD/+AAD//+AD////////////w==
-</value>
-  </data>
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAbRdJREFUeF7t
@@ -654,8 +607,8 @@
         AAAAAAAAAAAAAAAAADLH//t//x/3YhpB1nHrtQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>287, 17</value>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>40</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

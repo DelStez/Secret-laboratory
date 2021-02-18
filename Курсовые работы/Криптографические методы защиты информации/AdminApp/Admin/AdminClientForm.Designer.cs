@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminClientForm));
-            this.TrayMode = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TrayModeMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.TrayModeMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendTextBox = new System.Windows.Forms.TextBox();
@@ -56,15 +54,6 @@
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // TrayMode
-            // 
-            this.TrayMode.BalloonTipTitle = "Admin - Client";
-            this.TrayMode.ContextMenuStrip = this.TrayModeMenuStrip;
-            this.TrayMode.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayMode.Icon")));
-            this.TrayMode.Text = "Admin - Client";
-            this.TrayMode.Visible = true;
-            this.TrayMode.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayMode_MouseDoubleClick);
-            // 
             // TrayModeMenuStrip
             // 
             this.TrayModeMenuStrip.AccessibleRole = System.Windows.Forms.AccessibleRole.Client;
@@ -78,14 +67,14 @@
             this.TrayModeMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.TrayModeMenuStrip.ShowImageMargin = false;
             this.TrayModeMenuStrip.ShowItemToolTips = false;
-            this.TrayModeMenuStrip.Size = new System.Drawing.Size(134, 48);
+            this.TrayModeMenuStrip.Size = new System.Drawing.Size(156, 70);
             // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.AboutToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.AboutToolStripMenuItem.Text = "О программе...";
             this.AboutToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
             this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
@@ -95,7 +84,7 @@
             this.ExitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ExitToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.ExitToolStripMenuItem.Text = "Выход";
             this.ExitToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
@@ -335,10 +324,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "AdminClientForm";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Admin-Client";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AdminClientForm_FormClosing);
             this.Load += new System.EventHandler(this.AdminClientForm_Load);
             this.TrayModeMenuStrip.ResumeLayout(false);
@@ -351,8 +338,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.NotifyIcon TrayMode;
         private System.Windows.Forms.ContextMenuStrip TrayModeMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitToolStripMenuItem;

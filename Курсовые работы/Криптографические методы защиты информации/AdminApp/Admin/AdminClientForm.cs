@@ -5,12 +5,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Admin
 {
@@ -29,6 +31,7 @@ namespace Admin
             public EventWaitHandle handle;
         };
         private MyClient obj;
+        private string pubKeyString;
         private Task send = null;
         private bool exit = false;
         public AdminClientForm()
@@ -37,9 +40,6 @@ namespace Admin
             
         }
 
-        #region WorkWithForm
-
-        //////////////////////////////////////////////////// Обработка событий формы  /////////////////////////////////////////////////////////////////
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -153,7 +153,7 @@ namespace Admin
         {
             Log();
         }
-        #endregion WorkWithForm
+
         private string SysteMessage(string msg)
         {
             return string.Format("SYSTEM: {0}", msg);
@@ -189,6 +189,7 @@ namespace Admin
         private void BeginWrite(string msg)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(msg);
+
             if (obj.client.Connected)
             {
                 try
@@ -250,11 +251,22 @@ namespace Admin
                 GetDate j = new GetDate();
                 j.ParseCommand(message);
                 List<string> report = j.information;
-                foreach (string g  in report)
+                Aes aes = Aes.Create();
+                Send(String.Format("<GK>{0}", EncryptKey((aes.Key))));
+                Thread.Sleep(1000);
+                Send(String.Format("<IV>{0}", EncryptKey(aes.IV)));
+                Thread.Sleep(3000);
+                foreach (string g in report)
                 {
-                    Send(g);
+                    Send(String.Format("<GetDateResult>{0}",  AESEncrypt(g, aes.Key, aes.IV)));
+                    Thread.Sleep(1000);
                 }
 
+                return true;
+            }
+            else if (message.Contains("RSAKeyValue"))
+            {
+                pubKeyString = message;
                 return true;
             }
             else
@@ -335,7 +347,7 @@ namespace Admin
                     }
                     else
                     {
-                        JavaScriptSerializer json = new JavaScriptSerializer(); // feel free to use JSON serializer
+                        JavaScriptSerializer json = new JavaScriptSerializer();
                         Dictionary<string, string> data = json.Deserialize<Dictionary<string, string>>(obj.data.ToString());
                         if (data.ContainsKey("status") && data["status"].Equals("authorized"))
                         {
@@ -427,7 +439,49 @@ namespace Admin
                 Log(ErrorMsg(ex.Message));
             }
         }
+        #region AES
+        public string EncryptKey(byte[] keyAes)
+        {
 
+            var rsa = new RSACryptoServiceProvider(1024);
+            rsa.FromXmlString(pubKeyString);
+            var encryptedData = rsa.Encrypt(keyAes, true);
+            var base64Encrypted = Convert.ToBase64String(encryptedData);
+            return base64Encrypted;
+        }
+        public string AESEncrypt(string temp, byte[] keyAes, byte[] IVaes)
+        {
+            if (temp == null || temp.Length <= 0 || IVaes == null || IVaes.Length <= 0 || keyAes == null || keyAes.Length <= 0)
+                throw new ArgumentNullException("Checkinputdate");
+            byte[] encrypted = EncryptAesData(temp, keyAes, IVaes);
+            return Convert.ToBase64String(encrypted);
+        }
 
+        private static byte[] EncryptAesData(string currentData, byte[] Key, byte[] IV)
+        {
+            byte[] byteEncrypt;
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Key;
+                aes.IV = IV;
+
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(cs))
+                        {
+                            sw.Write(currentData);
+                        }
+                        byteEncrypt = ms.ToArray();
+                    }
+                }
+            }
+            return byteEncrypt;
+        }
+            #endregion AES
     }
 }
