@@ -12,7 +12,7 @@ namespace ConsoleApp1
         public static Encoding encoding = Encoding.GetEncoding("windows-1251");
         public static Encoding encoding1 = Encoding.GetEncoding("koi8r");
         public static Encoding encoding2 = Encoding.GetEncoding("cp866");
-        public static string path = "C:\\Users\\Kanda\\OneDrive\\Рабочий стол\\variant07.docx";
+        public static string path = "C:\\Users\\Kanda\\Desktop\\variant02.docx";
         static void BitArrayToString(List<bool> bits)
         {
             byte[] strArr = new byte[bits.Count];

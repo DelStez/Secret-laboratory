@@ -19,7 +19,7 @@ namespace Stegano_Bmp
         private void GetImage_Click(object sender, EventArgs e) //Загрузка изображения
         {
             OpenFileDialog fileDialog = new OpenFileDialog();// Диалог. окно - выбор файла
-            fileDialog.Filter = "Image files(*.jpg, *.bmp) | *.jpg; *.bmp";//Фильтр форматов
+            fileDialog.Filter = "Image files(*.jpg, *.bmp, *.png, *.gif) | *.jpg; *.bmp; *.png; *.gif";//Фильтр форматов
             fileDialog.InitialDirectory = @"C:\"; // католог по умолчанию
 
             if (fileDialog.ShowDialog() == DialogResult.OK)// Если файл был выбран

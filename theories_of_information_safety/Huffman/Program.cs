@@ -164,6 +164,10 @@ namespace Huffman
     {
         public static Dictionary<string, double> alphaBetNew = new Dictionary<string, double>();
         public static Dictionary<string, string> alphaBetNewCode = new Dictionary<string, string>();
+        public static Dictionary<string, double> alphaBetNewZ = new Dictionary<string, double>()
+            {{"Z1", 0.22},{"Z2", 0.20 },{"Z3", 0.16},{"Z4", 0.16 },
+            {"Z5", 0.10 },{"Z6", 0.10 },{"Z7", 0.04 },{"Z8", 0.02 }};
+
         public static void CreateDictonary(string message)
         {
             for (int i = 0; i < message.Length; i++)
@@ -218,7 +222,7 @@ namespace Huffman
         {
 
             //Добавленно 3 задание:
-            Console.WriteLine("Задание № 3");
+            //Console.WriteLine("Задание № 3");
             string message = "Дружелюбный город посреди пустыни, где солнце горячо, луна прекрасна, а таинственные огни проплывают у нас над головами, пока мы все притворяемся, что спим. " +
                 "Добро пожаловать в Найт-Вейл. Приветствую вас, слушатели. Для начала меня попросили прочитать одно короткое объявление:" +
                 " Городской cовет объявляет об открытии нового Парка для собак на углу Эрл и Сомерсет рядом с супермаркетом «Ральф'с». " +
@@ -231,6 +235,7 @@ namespace Huffman
             Encrypt(message, Program.alphaBetNewCode);
             Console.WriteLine("Получим обратное: ");
             Decrypt(t, Program.alphaBetNewCode);
+            new Huffman(alphaBetNewZ, true);
             Console.ReadLine();
         }
     }

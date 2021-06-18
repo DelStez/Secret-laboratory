@@ -139,7 +139,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 377);
+            this.ClientSize = new System.Drawing.Size(440, 377);
             this.Controls.Add(this.btnDelompres);
             this.Controls.Add(this.txtSimpan);
             this.Controls.Add(this.btnSimpan);
